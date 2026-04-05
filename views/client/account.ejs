@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind.com</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <style>
+    body { background: #f4f7fb; }
+
+    .acc-page { padding-top: 80px; min-height: 100vh; }
+
+    /* Top bar */
+    .acc-topbar {
+      background: white; border-bottom: 1px solid #eef1f5; padding: 0 24px;
+    }
+    .acc-topbar-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; height: 60px; flex-wrap: wrap;
+    }
+    .acc-user { display: flex; align-items: center; gap: 10px; }
+    .acc-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--brand-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .acc-user-name { font-weight: 700; font-size: 0.9rem; color: var(--brand-navy); }
+    .acc-user-email { font-size: 0.75rem; color: var(--text-muted); }
+
+    .acc-tabs { display: flex; gap: 0; }
+    .acc-tab {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 16px; font-size: 0.82rem; font-weight: 600;
+      color: var(--text-muted); text-decoration: none; border-radius: 8px;
+      transition: all 0.2s; border: none; background: none;
+      font-family: inherit;
+    }
+    .acc-tab:hover { color: var(--brand-blue); background: #eff6ff; }
+    .acc-tab.active { color: var(--brand-blue); background: #eff6ff; }
+    .acc-tab svg { width: 15px; height: 15px; }
+
+    /* Content */
+    .acc-content { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    .success-banner {
+      background: #d4edda; border: 1px solid #c3e6cb; color: #155724;
+      padding: 12px 16px; border-radius: 10px; margin-bottom: 20px;
+      font-size: 0.875rem; display: flex; align-items: center; gap: 8px;
+    }
+
+    /* Form card */
+    .form-card { background: white; border-radius: 12px; padding: 24px 28px; border: 1px solid #eef1f5; }
+    .form-card-title {
+      font-size: 0.9rem; font-weight: 700; color: var(--brand-navy);
+      margin-bottom: 20px; display: flex; align-items: center; gap: 8px;
+    }
+
+    .form-label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--brand-navy); margin-bottom: 5px; }
+    .form-input {
+      width: 100%; padding: 9px 12px; border: 1.5px solid #e2e8f0;
+      border-radius: 8px; font-size: 0.875rem; font-family: inherit;
+      transition: border-color 0.2s; box-sizing: border-box;
+    }
+    .form-input:focus { outline: none; border-color: var(--brand-blue); }
+    .form-input.is-invalid { border-color: #ef4444; }
+    .field-group { margin-bottom: 14px; }
+    .field-error { font-size: 0.72rem; color: #ef4444; margin-top: 3px; }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .section-header {
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase;
+      letter-spacing: 0.05em; color: var(--text-muted);
+      margin: 18px 0 10px; padding-bottom: 6px; border-bottom: 1px solid #f0f0f0;
+    }
+
+    /* Quick actions */
+    .quick-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 24px; }
+    .quick-action {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 8px 16px; background: white; border: 1px solid #eef1f5;
+      border-radius: 8px; font-size: 0.8rem; color: var(--text-body);
+      text-decoration: none; transition: all 0.2s; font-family: inherit;
+      font-weight: 500;
+    }
+    .quick-action:hover { border-color: var(--brand-blue); color: var(--brand-blue); background: #eff6ff; }
+    .quick-action svg { width: 14px; height: 14px; color: var(--brand-blue); }
+
+    @media (max-width: 600px) {
+      .acc-topbar-inner { height: auto; padding: 12px 0; }
+      .acc-content { padding: 20px 12px 60px; }
+      .field-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+<%- include('../partials/navbar') %>
+
+<div class="acc-page">
+  <!-- Top bar -->
+  <div class="acc-topbar">
+    <div class="acc-topbar-inner">
+      <div class="acc-user">
+        <div class="acc-avatar"><%= client.name.charAt(0).toUpperCase() %></div>
+        <div>
+          <div class="acc-user-name"><%= client.name %></div>
+          <div class="acc-user-email"><%= client.email %></div>
+        </div>
+      </div>
+
+      <nav class="acc-tabs">
+        <a href="/akun" class="acc-tab active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Pengaturan
+        </a>
+        <a href="/akun/pesanan" class="acc-tab">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Riwayat Pesanan
+        </a>
+        <a href="/chat" class="acc-tab">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat Admin
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="acc-content">
+    <% if (typeof success !== 'undefined' && success) { %>
+    <div class="success-banner">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+      <%= success %>
+    </div>
+    <% } %>
+
+    <form action="/akun" method="POST" class="form-card">
+      <div class="form-card-title">
+        <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Pengaturan Profil
+      </div>
+
+      <div class="field-row">
+        <div class="field-group" style="margin-bottom:0;">
+          <label class="form-label">Nama Lengkap <span style="color:#ef4444;">*</span></label>
+          <input type="text" name="name" class="form-input<%= (error && error.name) ? ' is-invalid' : '' %>"
+            value="<%= client.name || '' %>" required />
+          <% if (error && error.name) { %><div class="field-error"><%= error.name %></div><% } %>
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label class="form-label">No. HP / WhatsApp</label>
+          <input type="text" name="phone" class="form-input<%= (error && error.phone) ? ' is-invalid' : '' %>"
+            value="<%= client.phone || '' %>" placeholder="08xxxxxxxxxx" />
+          <% if (error && error.phone) { %><div class="field-error"><%= error.phone %></div><% } %>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-top: 14px; margin-bottom: 0;">
+        <label class="form-label">Email</label>
+        <input type="email" class="form-input" value="<%= client.email %>" disabled style="background:#f8fafc; color:var(--text-muted);" />
+        <div style="font-size:0.72rem; color:var(--text-muted); margin-top:3px;">Email tidak dapat diubah</div>
+      </div>
+
+      <div class="section-header">Alamat Pengiriman</div>
+
+      <div class="field-group" style="margin-bottom: 14px;">
+        <label class="form-label">Alamat Lengkap</label>
+        <textarea name="address" class="form-input" rows="2"
+          placeholder="Jl., RT/RW, Kelurahan, Kecamatan"><%= client.address || '' %></textarea>
+      </div>
+
+      <div class="field-row" style="margin-bottom: 0;">
+        <div class="field-group" style="margin-bottom:0;">
+          <label class="form-label">Kota / Kabupaten</label>
+          <input type="text" name="city" class="form-input" value="<%= client.city || '' %>" placeholder="Jakarta Selatan" />
+        </div>
+        <div class="field-group" style="margin-bottom:0;">
+          <label class="form-label">Provinsi</label>
+          <input type="text" name="province" class="form-input" value="<%= client.province || '' %>" placeholder="DKI Jakarta" />
+        </div>
+      </div>
+
+      <div class="field-row" style="margin-top: 14px;">
+        <div class="field-group" style="margin-bottom:0;">
+          <label class="form-label">Kode Pos</label>
+          <input type="text" name="postal_code" class="form-input<%= (error && error.postal_code) ? ' is-invalid' : '' %>"
+            value="<%= client.postal_code || '' %>" placeholder="12345" maxlength="10" />
+          <% if (error && error.postal_code) { %><div class="field-error"><%= error.postal_code %></div><% } %>
+        </div>
+        <div></div>
+      </div>
+
+      <% if (error && error._form) { %>
+      <div style="margin-top: 14px; padding: 10px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 8px; color: #991b1b; font-size: 0.8rem;">
+        <%= error._form %>
+      </div>
+      <% } %>
+
+      <div style="margin-top: 20px; display: flex; align-items: center; gap: 12px;">
+        <button type="submit" class="btn btn-primary btn-sm" style="padding: 10px 24px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Simpan Perubahan
+        </button>
+        <a href="/keranjang" class="quick-action" style="border:none; padding:10px 16px;">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/></svg>
+          Keranjang
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

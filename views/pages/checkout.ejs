@@ -1,0 +1,171 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<!-- Midtrans Snap.js -->
+<script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="<%= midtransClientKey %>"></script>
+
+<section style="padding: 140px 0 80px; background: linear-gradient(160deg, #FAFCFF, var(--accent-light)); text-align: center;">
+  <div class="container">
+    <span class="tag"><i data-lucide="credit-card" style="width:12px;height:12px;"></i> Checkout</span>
+    <h1 class="section-title reveal">Selesaikan Pesanan</h1>
+    <p style="color: var(--text-muted);" class="reveal">Lengkapi data dan lanjutkan ke pembayaran.</p>
+  </div>
+</section>
+
+<section style="padding: 60px 0 100px;">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 420px; gap: 32px; align-items: start;">
+
+      <!-- Left: Client Form -->
+      <div>
+        <div class="glass-card reveal" style="padding: 32px;">
+          <h3 style="margin-bottom: 24px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="user" style="width:18px;height:18px; color: var(--brand-blue);"></i>
+            Data Pemesan
+          </h3>
+
+          <% if (error) { %>
+          <div style="padding: 16px; background: #fef2f2; border: 1px solid #fecaca; border-radius: 10px; margin-bottom: 20px; color: #991b1b; font-size: 0.875rem;">
+            <i data-lucide="alert-circle" style="width:14px;height:14px; display:inline; vertical-align: middle; margin-right: 6px;"></i>
+            <%= error %>
+          </div>
+          <% } %>
+
+          <form id="checkoutForm">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 16px;">
+              <div class="form-group">
+                <label class="form-label">Nama Lengkap <span style="color: #ef4444;">*</span></label>
+                <input type="text" name="client_name" class="form-input"
+                  placeholder="Nama kamu"
+                  value="<%= clientData ? clientData.name : '' %>"
+                  required />
+              </div>
+              <div class="form-group">
+                <label class="form-label">Nomor WhatsApp <span style="color: #ef4444;">*</span></label>
+                <input type="text" name="whatsapp" class="form-input"
+                  placeholder="08xxxxxxxxxx"
+                  value="<%= clientData ? clientData.phone : '' %>"
+                  required />
+              </div>
+            </div>
+
+            <div class="form-group" style="margin-bottom: 16px;">
+              <label class="form-label">Email <span style="color: #ef4444;">*</span></label>
+              <input type="email" name="email" class="form-input"
+                placeholder="email@contoh.com"
+                value="<%= clientData ? clientData.email : '' %>"
+                required />
+            </div>
+
+            <!-- Alamat Pengiriman -->
+            <div style="margin-bottom: 16px;">
+              <div style="font-weight: 600; font-size: 0.85rem; color: var(--brand-navy); margin-bottom: 10px; display: flex; align-items: center; gap: 6px;">
+                <i data-lucide="map-pin" style="width:14px;height:14px; color: var(--brand-blue);"></i>
+                Alamat Pengiriman
+              </div>
+              <div class="form-group" style="margin-bottom: 10px;">
+                <textarea name="address" class="form-input" rows="2"
+                  placeholder="Jl., RT/RW, Kelurahan, Kecamatan"><%= clientData ? (clientData.address || '') : '' %></textarea>
+              </div>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px;">
+                <div class="form-group" style="margin-bottom: 0;">
+                  <input type="text" name="city" class="form-input"
+                    placeholder="Kota/Kabupaten"
+                    value="<%= clientData ? (clientData.city || '') : '' %>" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <input type="text" name="province" class="form-input"
+                    placeholder="Provinsi"
+                    value="<%= clientData ? (clientData.province || '') : '' %>" />
+                </div>
+                <div class="form-group" style="margin-bottom: 0;">
+                  <input type="text" name="postal_code" class="form-input"
+                    placeholder="Kode Pos" maxlength="10"
+                    value="<%= clientData ? (clientData.postal_code || '') : '' %>" />
+                </div>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label">Catatan (opsional)</label>
+              <textarea name="notes" class="form-input" rows="2"
+                placeholder="Warna filament, detail tambahan, dll."></textarea>
+            </div>
+
+            <!-- Payment Section -->
+            <div style="margin-top: 32px; padding-top: 24px; border-top: 2px solid #F1F5F9;">
+              <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 20px;">
+                <i data-lucide="shield-check" style="width:20px;height:20px; color: var(--brand-blue);"></i>
+                <div>
+                  <div style="font-weight: 700;">Pembayaran via Midtrans</div>
+                  <div style="font-size: 0.8rem; color: var(--text-muted);">Aman & terpercaya — Visa, Mastercard, GoPay, OVO, dll.</div>
+                </div>
+              </div>
+
+              <button type="submit" id="payBtn" class="btn btn-primary btn-lg" style="width: 100%;">
+                <i data-lucide="credit-card" style="width:18px;height:18px;"></i>
+                Bayar dengan Midtrans
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      <!-- Right: Order Summary -->
+      <div>
+        <div class="glass-card reveal" style="padding: 28px; position: sticky; top: 100px;">
+          <h3 style="margin-bottom: 20px; font-size: 1.05rem; display: flex; align-items: center; gap: 8px;">
+            <i data-lucide="package" style="width:18px;height:18px; color: var(--brand-blue);"></i>
+            Ringkasan Pesanan
+          </h3>
+
+          <div style="margin-bottom: 20px;">
+            <% cart.forEach(item => { %>
+            <div style="padding: 12px 0; border-bottom: 1px solid #F1F5F9;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-weight: 700; font-size: 0.9rem;">
+                  <span style="background: var(--brand-blue); color: white; padding: 1px 8px; border-radius: 20px; font-size: 0.7rem; margin-right: 6px;"><%= item.material %></span>
+                  <%= item.layerHeight %>mm
+                </span>
+                <span style="font-weight: 700; color: var(--brand-blue);">Rp <%= item.linePrice.toLocaleString('id-ID') %></span>
+              </div>
+              <div style="font-size: 0.8rem; color: var(--text-muted);">
+                <%= item.gramWeight %> gram × Rp <%= item.unitPrice.toLocaleString('id-ID') %>/gram
+              </div>
+            </div>
+            <% }); %>
+          </div>
+
+          <div style="display: flex; justify-content: space-between; align-items: center; padding: 16px; background: var(--accent-light); border-radius: 10px; margin-bottom: 16px;">
+            <span style="font-weight: 700;">Total Bayar</span>
+            <span id="totalDisplay" style="font-weight: 800; font-size: 1.4rem; color: var(--brand-blue);">
+              Rp <%= cart.reduce((s,i) => s + i.linePrice, 0).toLocaleString('id-ID') %>
+            </span>
+          </div>
+
+          <div style="font-size: 0.78rem; color: var(--text-muted); text-align: center; line-height: 1.5;">
+            Setelah pembayaran berhasil, pesanan akan diproses dan bisa dilacak di halaman Cek Pesanan.
+          </div>
+
+          <div style="margin-top: 16px;">
+            <a href="/keranjang" class="btn btn-ghost btn-sm" style="width: 100%; justify-content: center;">
+              <i data-lucide="arrow-left" style="width:14px;height:14px;"></i>
+              Kembali ke Keranjang
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+<script>lucide.createIcons();</script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script>
+  window.__cartData = <%- JSON.stringify(cart) %>;
+</script>
+</body>
+</html>

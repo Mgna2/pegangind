@@ -1,0 +1,582 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind.com</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <style>
+    body { margin: 0; background: #f0f4f8; font-family: 'Inter', sans-serif; }
+
+    .chat-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .chat-topbar {
+      background: #124875;
+      color: white;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
+    .chat-topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chat-topbar-left img { height: 32px; }
+
+    .chat-topbar-title {
+      font-family: 'Poppins', sans-serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .chat-topbar-sub {
+      font-size: 0.75rem;
+      opacity: 0.7;
+    }
+
+    .chat-topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .chat-topbar-right a {
+      color: rgba(255,255,255,0.85);
+      text-decoration: none;
+      font-size: 0.875rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .chat-topbar-right a:hover { color: white; }
+
+    .chat-container {
+      flex: 1;
+      display: flex;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px;
+      gap: 20px;
+      align-items: flex-start;
+    }
+
+    .chat-info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      width: 220px;
+      flex-shrink: 0;
+    }
+
+    .chat-info-card h3 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 0.95rem;
+      color: #124875;
+      margin: 0 0 14px;
+    }
+
+    .chat-info-field {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.8rem;
+      padding: 8px 0;
+      border-bottom: 1px solid #f0f0f0;
+    }
+
+    .chat-info-field:last-child { border-bottom: none; }
+    .chat-info-field .lbl { color: #888; }
+    .chat-info-field .val { font-weight: 600; color: #333; }
+
+    .chat-info-card .btn {
+      margin-top: 16px;
+      width: 100%;
+      text-align: center;
+      text-decoration: none;
+      display: block;
+      padding: 10px;
+      border-radius: 8px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .chat-info-card .btn-outline {
+      background: transparent;
+      border: 1px solid #ddd;
+      color: #555;
+    }
+
+    .chat-info-card .btn-outline:hover { background: #f5f5f5; }
+
+    .chat-box {
+      flex: 1;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      min-height: 520px;
+      max-height: calc(100vh - 140px);
+    }
+
+    .chat-box-header {
+      background: #124875;
+      color: white;
+      padding: 14px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .chat-box-header-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .chat-box-header-left strong { font-family: 'Poppins', sans-serif; font-size: 0.95rem; }
+
+    .online-dot {
+      width: 8px;
+      height: 8px;
+      background: #4ade80;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    #chat-status-badge {
+      font-size: 0.75rem;
+      opacity: 0.8;
+    }
+
+    .chat-messages {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px;
+      background: #f8fafc;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .chat-empty {
+      color: #999;
+      text-align: center;
+      margin-top: 40px;
+      font-size: 0.875rem;
+    }
+
+    .chat-empty svg { opacity: 0.4; margin-bottom: 8px; }
+
+    .chat-msg {
+      max-width: 75%;
+      padding: 10px 14px;
+      border-radius: 14px;
+      font-size: 0.875rem;
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .chat-msg.client {
+      align-self: flex-end;
+      background: #124875;
+      color: white;
+      border-bottom-right-radius: 4px;
+    }
+
+    .chat-msg.admin {
+      align-self: flex-start;
+      background: #e8f0fe;
+      color: #1a1a2e;
+      border-bottom-left-radius: 4px;
+    }
+
+    .chat-msg-time {
+      font-size: 0.7rem;
+      opacity: 0.65;
+      margin-top: 5px;
+      display: block;
+    }
+
+    .chat-msg-name {
+      font-size: 0.7rem;
+      font-weight: 600;
+      opacity: 0.8;
+      margin-bottom: 3px;
+      display: block;
+    }
+
+    .chat-input-bar {
+      display: flex;
+      border-top: 1px solid #eee;
+      padding: 14px 16px;
+      gap: 10px;
+      background: white;
+    }
+
+    .chat-input-bar input {
+      flex: 1;
+      border: 1px solid #ddd;
+      border-radius: 24px;
+      padding: 10px 18px;
+      font-size: 0.875rem;
+      outline: none;
+      font-family: 'Inter', sans-serif;
+      transition: border-color 0.2s;
+    }
+
+    .chat-input-bar input:focus { border-color: #124875; }
+
+    .chat-input-bar button {
+      background: #124875;
+      color: white;
+      border: none;
+      border-radius: 24px;
+      padding: 10px 22px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .chat-input-bar button:hover { background: #0d3660; }
+
+    /* Attachment buttons */
+    .chat-attach-area {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px 0;
+      background: white;
+      border-top: 1px solid #f0f0f0;
+    }
+
+    .attach-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid #ddd;
+      background: #f8f9fa;
+      color: #555;
+      transition: all 0.15s;
+      text-decoration: none;
+    }
+
+    .attach-btn:hover { background: #eef2f7; border-color: #c0d0e0; color: #124875; }
+    .attach-btn img-btn { color: #7b2d8b; }
+    .attach-btn img-btn:hover { background: #f3e8ff; border-color: #d8b4fe; }
+    .attach-btn.zip-btn { color: #c0392b; }
+    .attach-btn.zip-btn:hover { background: #fde8e8; border-color: #f5b7b1; }
+
+    .attach-btn input[type="file"] { display: none; }
+
+    /* Attachment preview in message */
+    .chat-attachment {
+      margin-top: 6px;
+      border-radius: 10px;
+      overflow: hidden;
+      max-width: 280px;
+    }
+
+    .chat-attachment img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+    }
+
+    .chat-attachment a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.15);
+      border-radius: 8px;
+      color: inherit;
+      text-decoration: none;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .admin .chat-attachment a { background: rgba(255,255,255,0.2); }
+
+    .file-icon { font-size: 1.2rem; }
+
+    /* Upload progress */
+    .upload-uploading { font-size: 0.72rem; opacity: 0.7; margin-left: 6px; }
+
+    @media (max-width: 640px) {
+      .chat-info-card { display: none; }
+      .chat-container { padding: 12px 8px; }
+      .chat-box { min-height: 0; max-height: calc(100vh - 110px); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-page">
+  <!-- Topbar -->
+  <div class="chat-topbar">
+    <div class="chat-topbar-left">
+      <img src="/assets/images/logo.png" alt="pegangind" />
+      <div>
+        <div class="chat-topbar-title">pegangind.com</div>
+        <div class="chat-topbar-sub">Jasa 3D Printing Profesional</div>
+      </div>
+    </div>
+    <div class="chat-topbar-right">
+      <a href="/">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        Beranda
+      </a>
+      <a href="/akun">
+        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <%= client.name %>
+      </a>
+      <a href="/keluar">Keluar</a>
+    </div>
+  </div>
+
+  <!-- Main chat area -->
+  <div class="chat-container">
+    <!-- Info sidebar -->
+    <div class="chat-info-card">
+      <h3>Info Akun</h3>
+      <div class="chat-info-field">
+        <span class="lbl">Nama</span>
+        <span class="val"><%= client.name %></span>
+      </div>
+      <div class="chat-info-field">
+        <span class="lbl">Email</span>
+        <span class="val" style="font-size: 0.72rem; text-align: right;"><%= client.email %></span>
+      </div>
+      <div class="chat-info-field">
+        <span class="lbl">ID Akun</span>
+        <span class="val" style="font-size: 0.7rem; font-family: monospace;"><%= client.client_id %></span>
+      </div>
+      <a href="/" class="btn btn-outline">← Kembali ke Beranda</a>
+      <a href="/akun" class="btn btn-outline" style="margin-top: 8px;">Pengaturan Akun</a>
+    </div>
+
+    <!-- Chat box -->
+    <div class="chat-box">
+      <div class="chat-box-header">
+        <div class="chat-box-header-left">
+          <strong>💬 Chat dengan Admin</strong>
+        </div>
+        <span id="chat-status-badge">Menghubungkan...</span>
+      </div>
+
+      <div class="chat-messages" id="chat-messages">
+        <div class="chat-empty" id="chat-empty">
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          <div>Memuat riwayat chat...</div>
+        </div>
+      </div>
+
+      <form class="chat-input-bar" id="chat-form">
+        <input
+          type="text"
+          id="chat-input"
+          placeholder="Ketik pesan untuk admin..."
+          autocomplete="off"
+        />
+        <button type="submit" id="chat-send-btn">Kirim</button>
+      </form>
+      <div class="chat-attach-area">
+        <label class="attach-btn img-btn" id="attach-img-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="18" x="3" y="3" rx="2" ry="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21"/></svg>
+          Gambar
+          <input type="file" id="attach-image" accept="image/jpeg,image/png,image/gif,image/webp" />
+        </label>
+        <label class="attach-btn zip-btn" id="attach-zip-label">
+          <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.5 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/><path d="M10 12a1 1 0 0 0-1 1v1a1 1 0 0 1-1 1 1 1 0 0 1 1 1v1a1 1 0 0 0 1 1"/><path d="M14 18a1 1 0 0 0 1-1v-1a1 1 0 0 1 1-1 1 1 0 0 1-1-1v-1a1 1 0 0 0-1-1"/></svg>
+          File ZIP
+          <input type="file" id="attach-file" accept=".zip,.rar,.7z" />
+        </label>
+        <span class="upload-uploading" id="upload-status"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+(function () {
+  var clientId = <%= client.id %>;
+  var socket = io();
+
+  var messagesEl = document.getElementById('chat-messages');
+  var statusEl = document.getElementById('chat-status-badge');
+  var chatForm = document.getElementById('chat-form');
+  var chatInput = document.getElementById('chat-input');
+  var sendBtn = document.getElementById('chat-send-btn');
+  var uploadStatus = document.getElementById('upload-status');
+  var attachImageInput = document.getElementById('attach-image');
+  var attachFileInput = document.getElementById('attach-file');
+
+  var pendingAttachment = null;
+
+  socket.on('connect', function () {
+    statusEl.textContent = '● Online';
+    socket.emit('client:join', { clientId: clientId });
+  });
+
+  socket.on('disconnect', function () {
+    statusEl.textContent = '○ Menghubungkan ulang...';
+  });
+
+  socket.on('chat:history', function (_ref) {
+    var messages = _ref.messages;
+    messagesEl.innerHTML = '';
+    if (messages.length === 0) {
+      messagesEl.innerHTML = '<div class="chat-empty"><svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div>Belum ada pesan. Mulai chat dengan admin sekarang!</div></div>';
+      return;
+    }
+    messages.forEach(renderMessage);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  });
+
+  socket.on('chat:new', function (_ref2) {
+    var message = _ref2.message;
+    renderMessage(message);
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  });
+
+  // Send message (with optional attachment)
+  function sendMessage(text, attachment) {
+    if (!text && !attachment) return;
+    socket.emit('client:message', {
+      message: text || (attachment ? '[Lampiran: ' + attachment.file_name + ']' : ''),
+      attachment: attachment
+    });
+  }
+
+  chatForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var text = chatInput.value.trim();
+    if (!text && !pendingAttachment) return;
+    chatInput.value = '';
+    sendMessage(text, pendingAttachment);
+    pendingAttachment = null;
+    chatInput.focus();
+  });
+
+  // File upload handlers
+  function handleFileChange(fieldName) {
+    return function (e) {
+      var file = e.target.files[0];
+      if (!file) return;
+      uploadFile(file, fieldName);
+      e.target.value = '';
+    };
+  }
+
+  attachImageInput.addEventListener('change', handleFileChange('image'));
+  attachFileInput.addEventListener('change', handleFileChange('file'));
+
+  function uploadFile(file, fieldName) {
+    uploadStatus.textContent = '⏳ Mengupload...';
+    sendBtn.disabled = true;
+
+    var formData = new FormData();
+    formData.append(fieldName, file);
+
+    fetch('/chat/upload', {
+      method: 'POST',
+      body: formData
+    })
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      sendBtn.disabled = false;
+      if (data.success) {
+        pendingAttachment = {
+          file_path: data.file_path,
+          file_name: data.file_name,
+          file_type: data.file_type
+        };
+        uploadStatus.textContent = '✅ ' + data.file_name + ' siap dikirim';
+        if (!chatInput.value.trim()) {
+          chatForm.dispatchEvent(new Event('submit'));
+        }
+        setTimeout(function () { uploadStatus.textContent = ''; }, 3000);
+      } else {
+        uploadStatus.textContent = '❌ ' + data.error;
+        setTimeout(function () { uploadStatus.textContent = ''; }, 4000);
+      }
+    })
+    .catch(function () {
+      sendBtn.disabled = false;
+      uploadStatus.textContent = '❌ Gagal upload';
+      setTimeout(function () { uploadStatus.textContent = ''; }, 4000);
+    });
+  }
+
+  function renderMessage(msg) {
+    var div = document.createElement('div');
+    div.className = 'chat-msg ' + (msg.sender_type || 'client');
+
+    var name = msg.sender_name || (msg.sender_type === 'admin' ? 'Admin' : '<%= client.name %>');
+    var time = '';
+    if (msg.created_at) {
+      var d = new Date(msg.created_at);
+      time = d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+    }
+
+    var html = '<span class="chat-msg-name">' + escapeHtml(name) + '</span>';
+    if (msg.message && msg.message.trim()) {
+      html += '<span>' + escapeHtml(msg.message) + '</span>';
+    }
+
+    // Render attachment
+    if (msg.file_path) {
+      html += renderAttachment(msg);
+    }
+
+    html += '<span class="chat-msg-time">' + time + '</span>';
+    div.innerHTML = html;
+    messagesEl.appendChild(div);
+  }
+
+  function renderAttachment(msg) {
+    if (msg.file_type === 'image') {
+      return '<div class="chat-attachment"><img src="' + msg.file_path + '" alt="lampiran" loading="lazy" onclick="window.open(this.src,\'_blank\')" style="cursor:zoom-in;" /></div>';
+    } else {
+      return '<div class="chat-attachment"><a href="' + msg.file_path + '" download="' + escapeHtml(msg.file_name) + '">' +
+        '<span class="file-icon">📦</span>' +
+        '<span style="flex:1;word-break:break-all;">' + escapeHtml(msg.file_name) + '</span>' +
+        '<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>' +
+        '</a></div>';
+    }
+  }
+
+  function escapeHtml(text) {
+    var d = document.createElement('div');
+    d.textContent = text || '';
+    return d.innerHTML;
+  }
+})();
+</script>
+</body>
+</html>

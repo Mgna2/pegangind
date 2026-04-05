@@ -1,0 +1,80 @@
+<nav class="navbar" id="navbar">
+  <div class="container">
+    <div class="navbar-inner">
+      <a href="/" class="logo-link">
+        <img src="/assets/images/logo.png" alt="pegangind" class="logo" />
+        <span style="font-family: 'Poppins', sans-serif; font-weight: 700; font-size: 1.1rem; color: var(--brand-navy); letter-spacing: 0.5px;">Pegangind</span>
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="/">Beranda</a></li>
+        <li><a href="/portofolio">Portofolio</a></li>
+        <li><a href="/harga">Harga</a></li>
+        <li><a href="/tentang">Tentang</a></li>
+        <li><a href="/kontak">Kontak</a></li>
+      </ul>
+
+      <!-- Right-side actions -->
+      <div class="navbar-actions">
+        <a href="/cek-pesanan" class="btn btn-outline btn-sm navbar-action-btn">
+          <i data-lucide="search" style="width:14px;height:14px;"></i>
+          Lacak
+        </a>
+
+        <!-- Cart icon button -->
+        <a href="/keranjang" class="navbar-cart-btn" title="Keranjang">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/>
+            <path d="M2.05 2.05h2l2.66 12.42a2 2 0 0 0 2 1.58h9.78a2 2 0 0 0 1.95-1.57l1.65-7.43H5.12"/>
+          </svg>
+        </a>
+
+        <% if (typeof clientUser !== 'undefined' && clientUser) { %>
+          <a href="/akun" class="btn btn-outline btn-sm navbar-action-btn">
+            <i data-lucide="user" style="width:14px;height:14px;"></i>
+            <%= clientUser.name.split(' ')[0] %>
+          </a>
+          <form action="/keluar" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-ghost btn-sm navbar-action-btn" style="font-size:0.8rem;">Keluar</button>
+          </form>
+        <% } else { %>
+          <a href="/masuk" class="btn btn-outline btn-sm navbar-action-btn">Masuk</a>
+          <a href="/daftar" class="btn btn-primary btn-sm navbar-action-btn">Daftar</a>
+        <% } %>
+      </div>
+
+      <button class="hamburger" id="hamburger" aria-label="Menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- Floating Chat Admin Button -->
+<a href="/chat" class="floating-chat-btn" title="Chat dengan Admin">
+  <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="white" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+  </svg>
+  <span style="font-size:0.7rem;font-weight:700;letter-spacing:0.02em;">Chat Admin</span>
+</a>
+
+<div class="mobile-menu" id="mobileMenu">
+  <button class="hamburger open" id="mobileClose" aria-label="Tutup" onclick="document.getElementById('hamburger').click()">
+    <span></span><span></span><span></span>
+  </button>
+  <a href="/">Beranda</a>
+  <a href="/portofolio">Portofolio</a>
+  <a href="/harga">Harga</a>
+  <a href="/tentang">Tentang</a>
+  <a href="/kontak">Kontak</a>
+  <a href="/cek-pesanan">Lacak Pesanan</a>
+  <a href="/keranjang" style="color: var(--brand-blue); font-weight: 600;">Keranjang</a>
+  <% if (typeof clientUser !== 'undefined' && clientUser) { %>
+    <a href="/chat" style="color:#25d366;font-weight:600;">💬 Chat Admin</a>
+    <a href="/akun">Akun Saya</a>
+    <a href="/keluar" style="color:#aaa;">Keluar</a>
+  <% } else { %>
+    <a href="/masuk">Masuk</a>
+    <a href="/daftar">Daftar</a>
+  <% } %>
+</div>

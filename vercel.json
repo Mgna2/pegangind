@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/server.js",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "/src/server.js" },
+    { "src": "/admin/login", "dest": "/src/server.js" },
+    { "src": "/(.*)", "dest": "/src/server.js" }
+  ],
+  "regions": ["sin1"],
+  "functions": {
+    "src/server.js": {
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  }
+}

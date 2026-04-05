@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind Admin</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar', { currentPage: 'orders' }) %>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="topbar-title"><%= order.order_id %></div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Edit & Update Pesanan</div>
+      </div>
+      <div class="topbar-actions">
+        <% if (order.whatsapp) { %>
+        <a href="https://wa.me/<%= order.whatsapp.replace(/^0/, '62') %>" target="_blank" class="btn btn-ghost btn-sm">
+          <i data-lucide="message-circle" style="width:14px;height:14px;"></i> WA Client
+        </a>
+        <% } %>
+        <a href="/admin/pesanan" class="btn btn-ghost btn-sm">
+          <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Semua Pesanan
+        </a>
+      </div>
+    </div>
+    <div class="admin-content">
+      <% const badgeMap = {'Pesanan Masuk':'gray','Sedang Dikerjakan':'blue','Sedang Dicetak':'blue','Selesai':'green','Siap Dikirim':'orange','Sudah Dikirim':'dark'}; %>
+      <script>window._orderId = '<%= order.id %>';</script>
+
+      <form action="/admin/pesanan/<%= order.id %>" method="POST" enctype="multipart/form-data">
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+          <!-- Main -->
+          <div>
+            <div style="background: white; border-radius: var(--radius-lg); border: 1px solid #F1F5F9; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04); margin-bottom: 24px;">
+              <div class="form-card-header">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                  <h3 style="display:flex;align-items:center;gap:8px;">
+                    <i data-lucide="package" style="width:16px;height:16px;"></i> Informasi Pesanan
+                  </h3>
+                  <span class="badge badge-<%= badgeMap[order.status] || 'gray' %>"><%= order.status %></span>
+                </div>
+              </div>
+              <div class="form-card-body">
+                <div class="form-grid-2">
+                  <div class="form-group">
+                    <label class="form-label">ID Pesanan</label>
+                    <input type="text" class="form-input" value="<%= order.order_id %>" readonly style="background: #F8FAFC; font-family: 'JetBrains Mono', monospace;" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                      <% ['Pesanan Masuk','Sedang Dikerjakan','Sedang Dicetak','Selesai','Siap Dikirim','Sudah Dikirim'].forEach(s => { %>
+                        <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s %></option>
+                      <% }) %>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Nama Client</label>
+                    <input type="text" name="client_name" class="form-input" value="<%= order.client_name %>" required />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">WhatsApp</label>
+                    <input type="text" name="whatsapp" class="form-input" value="<%= order.whatsapp || '' %>" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Nomor Resi Shopee</label>
+                    <input type="text" name="resi_shopee" class="form-input" value="<%= order.resi_shopee || '' %>" style="font-family: 'JetBrains Mono', monospace;" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Link Shopee</label>
+                    <input type="url" name="shopee_link" class="form-input" value="<%= order.shopee_link || '' %>" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Material</label>
+                    <select name="material" class="form-select">
+                      <option value="">Pilih material...</option>
+                      <option value="PLA+" <%= order.material === 'PLA+' ? 'selected' : '' %>>PLA+</option>
+                      <option value="PETG" <%= order.material === 'PETG' ? 'selected' : '' %>>PETG</option>
+                    </select>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Warna Filament</label>
+                    <input type="text" name="filament_color" class="form-input" value="<%= order.filament_color || '' %>" />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Nomor Tracking Pengiriman</label>
+                    <input type="text" name="tracking_number" class="form-input" value="<%= order.tracking_number || '' %>" style="font-family: 'JetBrains Mono', monospace;" placeholder="JNE, SiCepat, etc." />
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Tambah Pembayaran (Rp)</label>
+                    <input type="number" name="amount" class="form-input" placeholder="0" min="0" />
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Catatan Admin</label>
+                  <textarea name="notes" class="form-textarea"><%= order.notes || '' %></textarea>
+                </div>
+              </div>
+            </div>
+
+            <!-- Status Log -->
+            <% if (order.logs && order.logs.length > 0) { %>
+            <div style="background: white; border-radius: var(--radius-lg); border: 1px solid #F1F5F9; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+              <div style="padding: 16px 24px; border-bottom: 1px solid #F1F5F9; display:flex; align-items:center; gap:8px;">
+                <i data-lucide="list" style="width:16px;height:16px; color:var(--brand-blue);"></i>
+                <h3 style="font-size: 0.95rem; font-weight: 600;">Riwayat Status</h3>
+              </div>
+              <div style="padding: 20px 24px;">
+                <div class="status-log">
+                  <% order.logs.forEach(log => { %>
+                  <div class="log-item">
+                    <div class="log-dot"></div>
+                    <div class="log-time"><%= formatDateTime(log.changed_at) %></div>
+                    <div class="log-status">
+                      <% if (log.old_status) { %><span style="color: var(--text-muted);"><%= log.old_status %></span> &rarr;<% } %>
+                      <span style="color: var(--brand-blue); font-weight:600;"><%= log.new_status %></span>
+                    </div>
+                  </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+            <% } %>
+          </div>
+
+          <!-- Side: Images & Upload -->
+          <div>
+            <% if (order.images && order.images.length > 0) { %>
+            <div style="background: white; border-radius: var(--radius-lg); border: 1px solid #F1F5F9; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04); margin-bottom: 24px;">
+              <div style="padding: 16px 20px; border-bottom: 1px solid #F1F5F9; display:flex; align-items:center; gap:8px;">
+                <i data-lucide="images" style="width:15px;height:15px; color:var(--brand-blue);"></i>
+                <h3 style="font-size: 0.875rem; font-weight: 600;">Foto Pesanan</h3>
+              </div>
+              <div style="padding: 16px;">
+                <div class="order-gallery">
+                  <% order.images.forEach(img => { %>
+                  <div class="gallery-item">
+                    <img src="<%= img.image_path %>" alt="Gambar pesanan" onclick="openLightbox('<%= img.image_path %>')" />
+                    <div class="gallery-item-overlay">
+                      <button type="button" onclick="deleteImage(<%= img.id %>, this)" class="btn btn-sm btn-danger" style="padding: 6px 10px; font-size: 0.75rem;">
+                        <i data-lucide="trash-2" style="width:12px;height:12px;"></i>
+                      </button>
+                    </div>
+                  </div>
+                  <% }) %>
+                </div>
+              </div>
+            </div>
+            <% } %>
+
+            <!-- Upload New -->
+            <div style="background: white; border-radius: var(--radius-lg); border: 1px solid #F1F5F9; overflow: hidden; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+              <div class="form-card-header">
+                <h3 style="display:flex;align-items:center;gap:8px;">
+                  <i data-lucide="upload" style="width:15px;height:15px;"></i> Upload Gambar Baru
+                </h3>
+              </div>
+              <div style="padding: 20px;">
+                <div class="form-group">
+                  <label class="form-label">Jenis Gambar</label>
+                  <select name="image_type" class="form-select">
+                    <option value="design">Desain</option>
+                    <option value="process">Proses Cetak</option>
+                    <option value="result">Hasil Akhir</option>
+                    <option value="ready">Siap Kirim</option>
+                  </select>
+                </div>
+                <div class="dropzone">
+                  <div class="dropzone-icon">
+                    <i data-lucide="upload-cloud" style="width:32px;height:32px; color:var(--brand-blue); opacity:0.6;"></i>
+                  </div>
+                  <p style="font-weight: 600; font-size:0.875rem; margin-bottom: 4px;">Upload Gambar</p>
+                  <p style="font-size: 0.8rem; color: var(--text-muted);">Max 5MB/file</p>
+                  <input type="file" name="images" multiple accept="image/*" style="display: none;" />
+                </div>
+                <div class="image-preview-grid"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display: flex; gap: 12px; justify-content: flex-end; margin-top: 24px;">
+          <form action="/admin/pesanan/<%= order.id %>/delete" method="POST" style="margin:0;">
+            <button type="button" class="btn btn-danger" onclick="if(confirm('Hapus pesanan ini?')) this.form.submit()">
+              <i data-lucide="trash-2" style="width:15px;height:15px;"></i> Hapus
+            </button>
+          </form>
+          <button type="submit" class="btn btn-primary btn-lg">
+            <i data-lucide="save" style="width:16px;height:16px;"></i> Simpan Perubahan
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/admin.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

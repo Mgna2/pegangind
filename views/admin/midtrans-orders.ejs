@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind Admin</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar', { currentPage: 'midtrans-orders' }) %>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="topbar-title">Pesanan Midtrans</div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Pesanan masuk via checkout website</div>
+      </div>
+      <div class="topbar-actions">
+        <a href="/admin/pesanan" class="btn btn-ghost btn-sm">
+          <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Pesanan Shopee
+        </a>
+      </div>
+    </div>
+    <div class="admin-content">
+
+      <!-- Filters -->
+      <div class="glass-card" style="padding: 20px 24px; margin-bottom: 24px;">
+        <form method="GET" action="/admin/pesanan-midtrans" style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+          <input type="text" name="search" class="form-input" style="max-width: 300px;"
+            placeholder="Nama, ID Pesanan, ID Midtrans..." value="<%= filters.search || '' %>" />
+          <select name="status" class="form-select" style="max-width: 200px;">
+            <option value="">Semua Status Bayar</option>
+            <option value="pending" <%= filters.status === 'pending' ? 'selected' : '' %>>Pending</option>
+            <option value="paid" <%= filters.status === 'paid' ? 'selected' : '' %>>Lunas</option>
+            <option value="expire" <%= filters.status === 'expire' ? 'selected' : '' %>>Kadaluarsa</option>
+            <option value="unpaid" <%= filters.status === 'unpaid' ? 'selected' : '' %>>Unpaid</option>
+          </select>
+          <button type="submit" class="btn btn-primary btn-sm">
+            <i data-lucide="search" style="width:14px;height:14px;"></i> Filter
+          </button>
+          <a href="/admin/pesanan-midtrans" class="btn btn-ghost btn-sm">Reset</a>
+        </form>
+      </div>
+
+      <!-- Table -->
+      <div class="glass-card" style="padding: 0; overflow: hidden;">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>ID Pesanan</th>
+              <th>Client</th>
+              <th>WhatsApp</th>
+              <th>Material</th>
+              <th>Layer</th>
+              <th>Gram</th>
+              <th>Total</th>
+              <th>Status Bayar</th>
+              <th>Status Pesanan</th>
+              <th>Tanggal</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (orders.length === 0) { %>
+            <tr>
+              <td colspan="11" style="text-align: center; padding: 48px; color: var(--text-muted);">
+                Tidak ada pesanan Midtrans.
+              </td>
+            </tr>
+            <% } else { %>
+            <% orders.forEach(order => { %>
+              <% const payBadge = { pending:'orange', paid:'green', expire:'red', unpaid:'red' }; %>
+              <% const payLabel = { pending:'Pending', paid:'Lunas', expire:'Expired', unpaid:'Unpaid' }; %>
+              <% const badgeMap = {'Pesanan Masuk':'gray','Sedang Dikerjakan':'blue','Sedang Dicetak':'blue','Selesai':'green','Siap Dikirim':'orange','Sudah Dikirim':'dark'}; %>
+            <tr>
+              <td>
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; font-weight: 600; color: var(--brand-blue);"><%= order.order_id %></div>
+                <% if (order.midtrans_order_id) { %>
+                <div style="font-size: 0.7rem; color: var(--text-muted);"><%= order.midtrans_order_id %></div>
+                <% } %>
+              </td>
+              <td style="font-weight: 600;"><%= order.client_name %></td>
+              <td>
+                <% if (order.whatsapp) { %>
+                <a href="https://wa.me/<%= order.whatsapp.replace(/^0/, '62') %>" target="_blank"
+                  style="color: #25d366; font-size: 0.8rem; font-weight: 600; text-decoration: none;">
+                  <%= order.whatsapp %>
+                </a>
+                <% } else { %>—<% } %>
+              </td>
+              <td><span style="background: var(--brand-blue); color: white; padding: 2px 8px; border-radius: 20px; font-size: 0.7rem; font-weight: 600;"><%= order.material_type || order.material || '-' %></span></td>
+              <td><%= order.layer_height ? order.layer_height + 'mm' : '-' %></td>
+              <td><%= order.gram_weight ? order.gram_weight + 'g' : '-' %></td>
+              <td style="font-weight: 700; color: var(--brand-blue);"><%= order.total_price ? 'Rp ' + order.total_price.toLocaleString('id-ID') : '-' %></td>
+              <td><span class="badge badge-<%= payBadge[order.payment_status] || 'gray' %>"><%= payLabel[order.payment_status] || order.payment_status %></span></td>
+              <td><span class="badge badge-<%= badgeMap[order.status] || 'gray' %>"><%= order.status %></span></td>
+              <td style="font-size: 0.78rem; color: var(--text-muted);"><%= formatDate(order.created_at) %></td>
+              <td>
+                <a href="/admin/pesanan-midtrans/<%= order.id %>/edit" class="btn btn-primary btn-sm" style="display: inline-flex; align-items: center; gap: 4px;">
+                  <i data-lucide="pencil" style="width:12px;height:12px;"></i> Edit
+                </a>
+              </td>
+            </tr>
+            <% }); %>
+            <% } %>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>lucide.createIcons();</script>
+</body>
+</html>

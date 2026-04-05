@@ -1,0 +1,109 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<section style="padding: 140px 0 80px; background: linear-gradient(160deg, #FAFCFF, var(--accent-light)); text-align: center;">
+  <div class="container">
+    <span class="tag"><i data-lucide="mail" style="width:12px;height:12px;"></i> Hubungi Kami</span>
+    <h1 class="section-title reveal">Punya Pertanyaan? Yuk Ngobrol!</h1>
+    <div class="divider reveal" style="margin: 16px auto;"></div>
+    <p class="reveal" style="color: var(--text-muted);">Tim kami siap membantu kamu dari Senin–Sabtu, pukul 08.00–20.00 WIB.</p>
+  </div>
+</section>
+
+<section style="padding: 60px 0 100px;">
+  <div class="container">
+    <% if (typeof success !== 'undefined' && success) { %>
+    <div class="alert alert-success reveal" style="max-width: 640px; margin: 0 auto 32px; display: flex; align-items: center; gap: 10px;">
+      <i data-lucide="check-circle" style="width:18px;height:18px;"></i>
+      Pesan kamu sudah terkirim! Kami akan menghubungi kamu dalam 24 jam.
+    </div>
+    <% } %>
+
+    <div class="contact-grid reveal">
+      <div>
+        <h2 style="font-size: 1.75rem; margin-bottom: 32px;">Informasi Kontak</h2>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="smartphone" style="width:20px;height:20px;"></i></div>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px;">WhatsApp</div>
+            <a href="https://wa.me/6281234567890" style="color: var(--brand-blue); font-weight: 500;">+62 812-3456-7890</a>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Respon dalam 1 jam</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="mail" style="width:20px;height:20px;"></i></div>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px;">Email</div>
+            <a href="mailto:hello@pegangind.com" style="color: var(--brand-blue); font-weight: 500;">hello@pegangind.com</a>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Respon dalam 24 jam</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="shopping-bag" style="width:20px;height:20px;"></i></div>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px;">Shopee Store</div>
+            <a href="https://shopee.co.id/pegangind" style="color: var(--brand-blue); font-weight: 500;">shopee.co.id/pegangind</a>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Order & chat langsung</div>
+          </div>
+        </div>
+        <div class="contact-info-item">
+          <div class="contact-info-icon"><i data-lucide="map-pin" style="width:20px;height:20px;"></i></div>
+          <div>
+            <div style="font-weight: 600; margin-bottom: 4px;">Lokasi Studio</div>
+            <div style="color: var(--text-muted);">Bandung, Jawa Barat, Indonesia</div>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Pengiriman ke seluruh Indonesia via Shopee</div>
+          </div>
+        </div>
+        <div style="margin-top: 24px; border-radius: var(--radius-lg); overflow: hidden; height: 200px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; color: var(--text-muted); gap: 10px;">
+          <i data-lucide="map" style="width:24px;height:24px; opacity: 0.5;"></i>
+          <span>Google Maps — Bandung, Indonesia</span>
+        </div>
+      </div>
+
+      <div class="glass-card" style="padding: 36px;">
+        <h3 style="margin-bottom: 24px;">Kirim Pesan</h3>
+        <form action="/kontak" method="POST">
+          <div class="form-grid-2">
+            <div class="form-group">
+              <label class="form-label">Nama</label>
+              <input type="text" name="name" class="form-input" placeholder="Nama kamu" required />
+            </div>
+            <div class="form-group">
+              <label class="form-label">WhatsApp</label>
+              <input type="text" name="whatsapp" class="form-input" placeholder="08xxxxxxxxxx" />
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Email</label>
+            <input type="email" name="email" class="form-input" placeholder="email@kamu.com" required />
+          </div>
+          <div class="form-group">
+            <label class="form-label">Jenis Pesanan</label>
+            <select name="type" class="form-select">
+              <option value="">Pilih kategori...</option>
+              <option>Custom 3D Print</option>
+              <option>Figurine / Miniatur</option>
+              <option>Prototipe Produk</option>
+              <option>Parts Mekanik</option>
+              <option>Pertanyaan Umum</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Pesan / Deskripsi Project</label>
+            <textarea name="message" class="form-textarea" rows="5" placeholder="Ceritakan kebutuhan 3D print kamu..."></textarea>
+          </div>
+          <button type="submit" class="btn btn-primary btn-block btn-lg">
+            <i data-lucide="send" style="width:18px;height:18px;"></i>
+            Kirim Pesan
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+<script>lucide.createIcons();</script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

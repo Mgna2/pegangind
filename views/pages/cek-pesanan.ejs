@@ -1,0 +1,73 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<section class="track-hero">
+  <div class="container">
+    <span class="tag"><i data-lucide="search" style="width:12px;height:12px;"></i> Order Tracking</span>
+    <h1 class="section-title" style="margin-bottom: 12px;">Lacak Pesanan Kamu</h1>
+    <p style="color: var(--text-muted);">Masukkan nomor resi Shopee atau ID pesanan untuk melihat status pesananmu.</p>
+  </div>
+</section>
+
+<section style="padding: 60px 0 100px;">
+  <div class="container">
+    <div class="glass-card track-input-section reveal">
+      <form id="trackForm">
+        <label class="form-label" style="font-size: 1rem; margin-bottom: 12px; display: block;">Nomor Resi Shopee</label>
+        <input
+          type="text"
+          id="resiInput"
+          class="resi-input"
+          placeholder="Contoh: SNWA1234567890"
+          value="<%= typeof resi !== 'undefined' && resi ? resi : '' %>"
+          autocomplete="off"
+          style="margin-bottom: 12px;"
+        />
+        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+          <div style="flex: 1; height: 1px; background: #E5E7EB;"></div>
+          <span style="font-size: 0.78rem; color: var(--text-muted); white-space: nowrap;">atau</span>
+          <div style="flex: 1; height: 1px; background: #E5E7EB;"></div>
+        </div>
+        <label class="form-label" style="font-size: 1rem; margin-bottom: 12px; display: block;">ID Pesanan</label>
+        <input
+          type="text"
+          id="orderIdInput"
+          class="resi-input"
+          placeholder="Contoh: PG-20260401-001"
+          autocomplete="off"
+          style="margin-bottom: 16px;"
+        />
+        <button type="submit" id="trackBtn" class="btn btn-primary btn-lg btn-block" style="margin-top: 8px;">
+          <i data-lucide="search" style="width:18px;height:18px;"></i>
+          Lacak Sekarang
+        </button>
+      </form>
+    </div>
+
+    <div id="trackResult" style="margin-top: 32px; max-width: 780px; margin: 32px auto 0;"></div>
+
+    <div class="track-empty-state reveal" id="emptyState">
+      <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+        <i data-lucide="package" style="width:64px;height:64px; opacity: 0.35; color: var(--brand-blue);"></i>
+      </div>
+      <h3 style="margin-bottom: 8px; color: var(--text-primary);">Belum Ada Pencarian</h3>
+      <p>Masukkan nomor resi Shopee kamu di atas untuk melacak status pesanan.</p>
+      <p style="margin-top: 12px; font-size: 0.8rem;">Butuh bantuan? <a href="/kontak" style="color: var(--brand-blue); font-weight: 600;">Hubungi kami</a></p>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+<script>lucide.createIcons();</script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/tracker.js"></script>
+<script>
+  const trackResult = document.getElementById('trackResult');
+  const emptyState = document.getElementById('emptyState');
+  const observer = new MutationObserver(() => {
+    emptyState.style.display = trackResult.innerHTML.trim() !== '' ? 'none' : '';
+  });
+  observer.observe(trackResult, { childList: true });
+</script>
+</body>
+</html>

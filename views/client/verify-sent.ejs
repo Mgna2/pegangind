@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind.com</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+<div class="admin-login-page">
+  <div class="blob blob-1" style="opacity: 0.2;"></div>
+  <div class="blob blob-2" style="opacity: 0.15;"></div>
+
+  <div class="login-card" style="position: relative; z-index: 2; max-width: 460px; text-align: center;">
+    <div style="font-size: 3.5rem; margin-bottom: 16px;">📧</div>
+    <img src="/assets/images/logo.png" alt="pegangind" class="logo" style="margin-bottom: 24px;" />
+    <h2 style="margin-bottom: 8px; font-size: 1.4rem;">Link Verifikasi Terkirim!</h2>
+    <p style="color: var(--text-muted); margin-bottom: 24px; line-height: 1.6;">
+      Kami telah mengirim link verifikasi ke:<br />
+      <strong style="color: var(--brand-blue);"><%= email %></strong>
+    </p>
+    <div class="alert" style="background: #e8f4fd; border: 1px solid #b8daff; color: #124875; text-align: left; margin-bottom: 24px;">
+      <strong>Langkah selanjutnya:</strong><br />
+      1. Buka inbox email kamu<br />
+      2. Klik tombol <strong>"Verifikasi Email"</strong><br />
+      3. Link berlaku selama <strong>24 jam</strong>
+    </div>
+    <p style="color: var(--text-muted); font-size: 0.8rem; margin-bottom: 20px;">
+      Tidak menerima email? Cek folder <strong>Spam</strong> atau <a href="/daftar" style="color: var(--brand-blue);">coba daftar lagi</a>.
+    </p>
+    <a href="/masuk" class="btn btn-primary" style="display: inline-block;">Sudah verifikasi? Masuk</a>
+    <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 20px;">
+      <a href="/" style="color: var(--brand-blue);">← Kembali ke Website</a>
+    </p>
+  </div>
+</div>
+</body>
+</html>

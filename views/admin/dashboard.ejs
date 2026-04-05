@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind Admin</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar', { currentPage: 'dashboard' }) %>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title">Dashboard</div>
+      <div class="topbar-actions">
+        <a href="/admin/pesanan/baru" class="btn btn-primary btn-sm">
+          <i data-lucide="plus" style="width:14px;height:14px;"></i> Pesanan Baru
+        </a>
+      </div>
+    </div>
+    <div class="admin-content">
+      <!-- Stats -->
+      <div class="stats-grid">
+        <div class="stat-card reveal">
+          <div class="stat-icon"><i data-lucide="wallet" style="width:22px;height:22px;"></i></div>
+          <div class="stat-value"><%= formatRupiah(stats.totalIncome) %></div>
+          <div class="stat-label">Pendapatan Bulan Ini</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-1">
+          <div class="stat-icon" style="background: #EFF6FF; color: #1D4ED8;">
+            <i data-lucide="package" style="width:22px;height:22px;"></i>
+          </div>
+          <div class="stat-value"><%= stats.activeOrders %></div>
+          <div class="stat-label">Pesanan Aktif</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-2">
+          <div class="stat-icon" style="background: #F0FDF4; color: #16A34A;">
+            <i data-lucide="check-circle" style="width:22px;height:22px;"></i>
+          </div>
+          <div class="stat-value"><%= stats.completedMonth %></div>
+          <div class="stat-label">Selesai Bulan Ini</div>
+        </div>
+        <div class="stat-card reveal reveal-delay-3">
+          <div class="stat-icon" style="background: #FFF7ED; color: #EA580C;">
+            <i data-lucide="clock" style="width:22px;height:22px;"></i>
+          </div>
+          <div class="stat-value"><%= stats.pendingOrders %></div>
+          <div class="stat-label">Pesanan Pending</div>
+        </div>
+      </div>
+
+      <!-- Revenue Chart -->
+      <div class="chart-container reveal" style="margin-bottom: 28px;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h3 style="font-size: 1rem; font-weight: 600;">Pendapatan 14 Hari Terakhir</h3>
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Update real-time</span>
+        </div>
+        <div style="height: 280px;">
+          <canvas id="revenueChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Recent Orders -->
+      <div class="admin-table-wrapper reveal">
+        <div class="table-header">
+          <h3>Pesanan Terbaru</h3>
+          <a href="/admin/pesanan" class="btn btn-ghost btn-sm">Lihat Semua</a>
+        </div>
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>ID Pesanan</th>
+              <th>Client</th>
+              <th>Status</th>
+              <th>Tanggal</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% if (recentOrders.length === 0) { %>
+              <tr><td colspan="5" style="text-align:center; padding: 40px; color: var(--text-muted);">Belum ada pesanan</td></tr>
+            <% } %>
+            <% recentOrders.forEach(order => { %>
+            <% const badgeMap = {'Pesanan Masuk':'gray','Sedang Dikerjakan':'blue','Sedang Dicetak':'blue','Selesai':'green','Siap Dikirim':'orange','Sudah Dikirim':'dark'}; %>
+            <tr>
+              <td><span class="order-id-cell"><%= order.order_id %></span></td>
+              <td><strong><%= order.client_name %></strong></td>
+              <td><span class="badge badge-<%= badgeMap[order.status] || 'gray' %>"><%= order.status %></span></td>
+              <td><%= formatDate(order.created_at) %></td>
+              <td>
+                <a href="/admin/pesanan/<%= order.id %>/edit" class="btn btn-ghost btn-sm">
+                  <i data-lucide="pencil" style="width:13px;height:13px;"></i> Edit
+                </a>
+              </td>
+            </tr>
+            <% }) %>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  const chartData = <%- JSON.stringify(stats.incomeChart) %>;
+  const labels = chartData.map(d => d.date);
+  const data = chartData.map(d => d.total);
+</script>
+<script src="/assets/js/charts.js"></script>
+<script>initRevenueChart(labels, data);</script>
+<script src="/assets/js/admin.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

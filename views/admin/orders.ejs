@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind Admin</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar', { currentPage: 'orders' }) %>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div class="topbar-title">Semua Pesanan</div>
+      <div class="topbar-actions">
+        <a href="/admin/pesanan/baru" class="btn btn-primary btn-sm">
+          <i data-lucide="plus" style="width:14px;height:14px;"></i> Pesanan Baru
+        </a>
+      </div>
+    </div>
+    <div class="admin-content">
+      <!-- Filter Bar -->
+      <div style="background: white; border-radius: var(--radius-lg); border: 1px solid #F1F5F9; padding: 20px 24px; margin-bottom: 24px; box-shadow: 0 2px 12px rgba(0,0,0,0.04);">
+        <form method="GET" action="/admin/pesanan">
+          <div class="filter-bar">
+            <input type="text" name="search" class="form-input" placeholder="Cari nama, ID, atau resi..." value="<%= filters.search || '' %>" />
+            <select name="status" class="form-select" style="max-width: 220px;">
+              <option value="">Semua Status</option>
+              <% ['Pesanan Masuk','Sedang Dikerjakan','Sedang Dicetak','Selesai','Siap Dikirim','Sudah Dikirim'].forEach(s => { %>
+                <option value="<%= s %>" <%= filters.status === s ? 'selected' : '' %>><%= s %></option>
+              <% }) %>
+            </select>
+            <button type="submit" class="btn btn-primary">
+              <i data-lucide="search" style="width:15px;height:15px;"></i> Filter
+            </button>
+            <a href="/admin/pesanan" class="btn btn-ghost">Reset</a>
+          </div>
+        </form>
+      </div>
+
+      <div class="admin-table-wrapper">
+        <div class="table-header">
+          <h3>Daftar Pesanan (<%= orders.length %>)</h3>
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th>ID Pesanan</th>
+                <th>Client</th>
+                <th>WhatsApp</th>
+                <th>Resi Shopee</th>
+                <th>Status</th>
+                <th>Tanggal</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% if (orders.length === 0) { %>
+                <tr><td colspan="7" style="text-align:center; padding: 60px; color: var(--text-muted);">Tidak ada pesanan ditemukan</td></tr>
+              <% } %>
+              <% const badgeMap = {'Pesanan Masuk':'gray','Sedang Dikerjakan':'blue','Sedang Dicetak':'blue','Selesai':'green','Siap Dikirim':'orange','Sudah Dikirim':'dark'}; %>
+              <% orders.forEach(order => { %>
+              <tr>
+                <td><span class="order-id-cell"><%= order.order_id %></span></td>
+                <td><strong><%= order.client_name %></strong></td>
+                <td>
+                  <% if (order.whatsapp) { %>
+                    <a href="https://wa.me/<%= order.whatsapp.replace(/^0/, '62') %>" style="color: #25D366; font-size: 0.8rem; display:flex; align-items:center; gap:4px;" target="_blank">
+                      <i data-lucide="message-circle" style="width:13px;height:13px;"></i><%= order.whatsapp %>
+                    </a>
+                  <% } else { %><span style="color:var(--text-muted)">—</span><% } %>
+                </td>
+                <td style="font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;"><%= order.resi_shopee || '—' %></td>
+                <td><span class="badge badge-<%= badgeMap[order.status] || 'gray' %>"><%= order.status %></span></td>
+                <td style="font-size: 0.8rem; color: var(--text-muted);"><%= formatDate(order.created_at) %></td>
+                <td>
+                  <div class="action-buttons">
+                    <a href="/admin/pesanan/<%= order.id %>/edit" class="btn btn-ghost btn-sm" title="Edit">
+                      <i data-lucide="pencil" style="width:13px;height:13px;"></i>
+                    </a>
+                    <form action="/admin/pesanan/<%= order.id %>/delete" method="POST" style="display:inline;">
+                      <button type="submit" class="btn btn-sm" style="background: #FEE2E2; color: #DC2626;" onclick="return confirm('Yakin hapus pesanan <%= order.order_id %>?')">
+                        <i data-lucide="trash-2" style="width:13px;height:13px;"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              <% }) %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="/assets/js/admin.js"></script>
+<script src="/assets/js/main.js"></script>
+<script>lucide.createIcons();</script>
+</body>
+</html>

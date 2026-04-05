@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind.com</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+<div class="admin-login-page">
+  <div class="blob blob-1" style="opacity: 0.2;"></div>
+  <div class="blob blob-2" style="opacity: 0.15;"></div>
+
+  <div class="login-card" style="position: relative; z-index: 2; max-width: 440px; text-align: center;">
+    <% if (success) { %>
+      <div style="font-size: 3.5rem; margin-bottom: 16px;">✅</div>
+      <img src="/assets/images/logo.png" alt="pegangind" class="logo" style="margin-bottom: 24px;" />
+      <h2 style="margin-bottom: 8px; font-size: 1.4rem; color: #2d7a3a;">Email Berhasil Diverifikasi!</h2>
+      <p style="color: var(--text-muted); margin-bottom: 28px;"><%= message %></p>
+      <a href="/masuk" class="btn btn-primary btn-lg" style="display: inline-block;">Masuk Sekarang →</a>
+    <% } else { %>
+      <div style="font-size: 3.5rem; margin-bottom: 16px;">❌</div>
+      <img src="/assets/images/logo.png" alt="pegangind" class="logo" style="margin-bottom: 24px;" />
+      <h2 style="margin-bottom: 8px; font-size: 1.4rem; color: #c0392b;">Verifikasi Gagal</h2>
+      <p style="color: var(--text-muted); margin-bottom: 28px;"><%= message %></p>
+      <a href="/daftar" class="btn btn-primary btn-lg" style="display: inline-block;">Daftar Ulang</a>
+    <% } %>
+    <p style="text-align: center; font-size: 0.8rem; color: var(--text-muted); margin-top: 20px;">
+      <a href="/" style="color: var(--brand-blue);">← Kembali ke Website</a>
+    </p>
+  </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind.com</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <style>
+    body { background: #f4f7fb; }
+
+    .od-page { padding-top: 80px; min-height: 100vh; }
+
+    /* Top bar */
+    .od-topbar {
+      background: white; border-bottom: 1px solid #eef1f5; padding: 0 24px;
+    }
+    .od-topbar-inner {
+      max-width: 900px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
+      gap: 16px; height: 60px; flex-wrap: wrap;
+    }
+    .od-user { display: flex; align-items: center; gap: 10px; }
+    .od-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--brand-blue); color: white;
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 700; font-size: 0.9rem; flex-shrink: 0;
+    }
+    .od-user-name { font-weight: 700; font-size: 0.9rem; color: var(--brand-navy); }
+    .od-user-email { font-size: 0.75rem; color: var(--text-muted); }
+
+    .od-tabs { display: flex; gap: 0; }
+    .od-tab {
+      display: flex; align-items: center; gap: 6px;
+      padding: 6px 16px; font-size: 0.82rem; font-weight: 600;
+      color: var(--text-muted); text-decoration: none; border-radius: 8px;
+      transition: all 0.2s; border: none; background: none;
+      font-family: inherit;
+    }
+    .od-tab:hover { color: var(--brand-blue); background: #eff6ff; }
+    .od-tab.active { color: var(--brand-blue); background: #eff6ff; }
+    .od-tab svg { width: 15px; height: 15px; }
+
+    /* Content */
+    .od-content { max-width: 900px; margin: 0 auto; padding: 28px 24px 60px; }
+
+    .back-link {
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 0.82rem; color: var(--text-muted); text-decoration: none;
+      margin-bottom: 20px; transition: color 0.2s; font-weight: 500;
+    }
+    .back-link:hover { color: var(--brand-blue); }
+
+    /* Info header card */
+    .od-header-card {
+      background: white; border-radius: 12px; padding: 18px 24px;
+      margin-bottom: 14px; border: 1px solid #eef1f5;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      flex-wrap: wrap; gap: 12px;
+    }
+    .od-order-id { font-family: 'JetBrains Mono', monospace; font-size: 1.05rem; font-weight: 700; color: var(--brand-blue); }
+    .od-order-date { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 4px 10px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; }
+    .badge-green { background: #d4edda; color: #155724; }
+    .badge-yellow { background: #fff3cd; color: #856404; }
+    .badge-blue { background: #dbeafe; color: #1e40af; }
+    .badge-orange { background: #fff7ed; color: #9a3412; }
+    .badge-gray { background: #f1f5f9; color: #475569; }
+    .badge-red { background: #fee2e2; color: #991b1b; }
+
+    /* Info rows */
+    .od-row { background: white; border-radius: 12px; padding: 18px 24px; margin-bottom: 12px; border: 1px solid #eef1f5; }
+    .od-row-title {
+      font-size: 0.82rem; font-weight: 700; color: var(--text-muted);
+      text-transform: uppercase; letter-spacing: 0.05em;
+      margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid #f0f0f0;
+    }
+    .od-detail { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #f5f5f5; font-size: 0.875rem; }
+    .od-detail:last-child { border-bottom: none; }
+    .od-detail-label { color: var(--text-muted); }
+    .od-detail-value { font-weight: 600; color: var(--brand-navy); text-align: right; }
+    .od-detail-value.mono { font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+
+    .total-box {
+      background: var(--accent-light); border-radius: 10px;
+      padding: 14px 18px; display: flex; justify-content: space-between; align-items: center;
+      margin-top: 4px;
+    }
+    .total-label { font-weight: 600; color: var(--brand-navy); font-size: 0.9rem; }
+    .total-amount { font-size: 1.2rem; font-weight: 800; color: var(--brand-blue); }
+
+    .info-box {
+      background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px;
+      padding: 12px 16px; font-size: 0.82rem; color: #1e40af;
+      display: flex; gap: 10px; align-items: flex-start;
+    }
+    .info-box svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 1px; }
+
+    @media (max-width: 600px) {
+      .od-topbar-inner { height: auto; padding: 12px 0; }
+      .od-content { padding: 20px 12px 60px; }
+    }
+  </style>
+</head>
+<body>
+<%- include('../partials/navbar') %>
+
+<div class="od-page">
+  <!-- Top bar -->
+  <div class="od-topbar">
+    <div class="od-topbar-inner">
+      <div class="od-user">
+        <div class="od-avatar"><%= client.name.charAt(0).toUpperCase() %></div>
+        <div>
+          <div class="od-user-name"><%= client.name %></div>
+          <div class="od-user-email"><%= client.email %></div>
+        </div>
+      </div>
+
+      <nav class="od-tabs">
+        <a href="/akun" class="od-tab">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+          Pengaturan
+        </a>
+        <a href="/akun/pesanan" class="od-tab active">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+          Riwayat Pesanan
+        </a>
+        <a href="/chat" class="od-tab">
+          <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Chat Admin
+        </a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="od-content">
+    <a href="/akun/pesanan" class="back-link">
+      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      Kembali ke Riwayat Pesanan
+    </a>
+
+    <%
+      const statusBadge = {
+        'Pesanan Masuk':     { cls: 'badge-yellow' },
+        'Sedang Dikerjakan': { cls: 'badge-blue' },
+        'Sedang Dicetak':   { cls: 'badge-blue' },
+        'Selesai':          { cls: 'badge-green' },
+        'Siap Dikirim':     { cls: 'badge-orange' },
+        'Sudah Dikirim':    { cls: 'badge-green' },
+      };
+      const payBadge = {
+        'pending': { cls: 'badge-yellow', label: 'Menunggu' },
+        'paid':    { cls: 'badge-green', label: 'Lunas' },
+        'expire':  { cls: 'badge-red', label: 'Kadaluarsa' },
+        'unpaid':  { cls: 'badge-red', label: 'Belum Bayar' },
+      };
+      const sb = statusBadge[order.status] || { cls: 'badge-gray' };
+      const pb = payBadge[order.payment_status] || { cls: 'badge-gray', label: order.payment_status || '—' };
+    %>
+
+    <!-- Header -->
+    <div class="od-header-card">
+      <div>
+        <div class="od-order-id"><%= order.order_id %></div>
+        <div class="od-order-date">Dibuat <%= formatDateTime(order.created_at) %></div>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:6px; align-items:flex-end;">
+        <span class="badge <%= sb.cls %>"><%= order.status %></span>
+        <span class="badge <%= pb.cls %>"><%= pb.label %></span>
+      </div>
+    </div>
+
+    <!-- Product -->
+    <div class="od-row">
+      <div class="od-row-title">Detail Produk</div>
+      <div class="od-detail">
+        <span class="od-detail-label">Material</span>
+        <span class="od-detail-value"><%= order.material_type || order.material || '-' %></span>
+      </div>
+      <div class="od-detail">
+        <span class="od-detail-label">Layer Height</span>
+        <span class="od-detail-value"><%= order.layer_height ? order.layer_height + ' mm' : '-' %></span>
+      </div>
+      <div class="od-detail">
+        <span class="od-detail-label">Berat</span>
+        <span class="od-detail-value"><%= order.gram_weight ? order.gram_weight + ' gram' : '-' %></span>
+      </div>
+      <div class="od-detail">
+        <span class="od-detail-label">Harga/gram</span>
+        <span class="od-detail-value">
+          <% if (order.total_price && order.gram_weight) { %>
+            Rp <%= Math.round(order.total_price / order.gram_weight).toLocaleString('id-ID') %>
+          <% } else { %>—<% } %>
+        </span>
+      </div>
+      <div style="margin-top: 10px;">
+        <div class="total-box">
+          <span class="total-label">Total Pembayaran</span>
+          <span class="total-amount"><%= order.total_price ? 'Rp ' + order.total_price.toLocaleString('id-ID') : '-' %></span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipping -->
+    <div class="od-row">
+      <div class="od-row-title">Alamat Pengiriman</div>
+      <% if (order.address || order.city || order.province) { %>
+      <div style="font-size: 0.875rem; color: var(--brand-navy); line-height: 1.7;">
+        <%= order.address ? order.address + (order.city || order.province ? '<br>' : '') : '' %>
+        <%= [order.city, order.province].filter(Boolean).join(', ') %>
+        <%= order.postal_code ? ' ' + order.postal_code : '' %>
+      </div>
+      <% } else { %>
+      <div style="font-size: 0.875rem; color: var(--text-muted);">Alamat tidak tersedia</div>
+      <% } %>
+
+      <% if (order.tracking_number) { %>
+      <div class="od-detail" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0;">
+        <span class="od-detail-label">No. Tracking</span>
+        <span class="od-detail-value mono"><%= order.tracking_number %></span>
+      </div>
+      <% } %>
+    </div>
+
+    <!-- Documentation Images -->
+    <% if (docImages && docImages.length > 0) { %>
+    <div class="od-row">
+      <div class="od-row-title">Dokumentasi Pesanan</div>
+      <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px;">
+        <% docImages.forEach(img => { %>
+        <a href="<%= img.image_path %>" target="_blank" style="display: block; border-radius: 10px; overflow: hidden; border: 1px solid #eef1f5; box-shadow: 0 1px 4px rgba(0,0,0,0.08);">
+          <img src="<%= img.image_path %>" alt="Dokumentasi" style="width: 100%; height: 140px; object-fit: cover; display: block;" />
+        </a>
+        <% }); %>
+      </div>
+      <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 10px;">Klik foto untuk memperbesar</p>
+    </div>
+    <% } %>
+    <% if (order.payment_method === 'midtrans') { %>
+    <div class="od-row">
+      <div class="od-row-title">Info Pembayaran</div>
+      <div class="od-detail">
+        <span class="od-detail-label">Metode</span>
+        <span class="od-detail-value">Midtrans</span>
+      </div>
+      <% if (order.midtrans_order_id) { %>
+      <div class="od-detail">
+        <span class="od-detail-label">Order ID Midtrans</span>
+        <span class="od-detail-value mono"><%= order.midtrans_order_id %></span>
+      </div>
+      <% } %>
+      <% if (order.midtrans_transaction_id) { %>
+      <div class="od-detail">
+        <span class="od-detail-label">Transaction ID</span>
+        <span class="od-detail-value mono"><%= order.midtrans_transaction_id %></span>
+      </div>
+      <% } %>
+    </div>
+    <% } %>
+
+    <!-- Notes -->
+    <% if (order.notes) { %>
+    <div class="od-row">
+      <div class="od-row-title">Catatan</div>
+      <div style="font-size: 0.875rem; color: var(--text-body); line-height: 1.6; background: #f8fafc; padding: 10px 14px; border-radius: 8px; border: 1px solid #f0f0f0;">
+        <%= order.notes %>
+      </div>
+    </div>
+    <% } %>
+
+    <!-- Info banner -->
+    <% if (order.status !== 'Selesai' && order.status !== 'Sudah Dikirim') { %>
+    <div class="info-box">
+      <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <div>
+        Pesanan kamu sedang <strong><%= order.status %></strong>. Hubungi admin untuk info lebih lanjut.
+        <a href="/chat" style="color: #1d4ed8; font-weight: 700; text-decoration: none; margin-left: 4px;">Chat Admin →</a>
+      </div>
+    </div>
+    <% } %>
+  </div>
+</div>
+
+<%- include('../partials/footer') %>
+</body>
+</html>

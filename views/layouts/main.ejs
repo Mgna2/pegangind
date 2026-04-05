@@ -1,0 +1,20 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+<main>
+  <%- body %>
+</main>
+<%- include('../partials/footer') %>
+<script>
+  lucide.createIcons();
+</script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/tracker.js"></script>
+<% if (typeof clientUser !== 'undefined' && clientUser) { %>
+<script>
+  window.PEGANGIND_CLIENT_ID = <%= clientUser.id %>;
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="/assets/js/chat-widget.js"></script>
+<% } %>
+</body>
+</html>

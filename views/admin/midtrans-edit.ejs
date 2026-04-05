@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title><%= title %> — pegangind Admin</title>
+  <link rel="icon" href="/assets/images/logo.png" type="image/png" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/animations.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
+  <link rel="stylesheet" href="/assets/css/admin.css" />
+</head>
+<body>
+<div class="admin-layout">
+  <%- include('../partials/admin-sidebar', { currentPage: 'midtrans-orders' }) %>
+  <div class="admin-main">
+    <div class="admin-topbar">
+      <div>
+        <div class="topbar-title"><%= order.order_id %></div>
+        <div style="font-size: 0.8rem; color: var(--text-muted);">Edit Pesanan Midtrans</div>
+      </div>
+      <div class="topbar-actions">
+        <% if (order.whatsapp) { %>
+        <a href="https://wa.me/<%= order.whatsapp.replace(/^0/, '62') %>" target="_blank" class="btn btn-ghost btn-sm" style="color: #25d366;">
+          <i data-lucide="message-circle" style="width:14px;height:14px;"></i> WA Client
+        </a>
+        <% } %>
+        <a href="/admin/pesanan-midtrans" class="btn btn-ghost btn-sm">
+          <i data-lucide="arrow-left" style="width:14px;height:14px;"></i> Kembali
+        </a>
+      </div>
+    </div>
+    <div class="admin-content">
+
+      <form id="midtransEditForm" action="/admin/pesanan-midtrans/<%= order.id %>" method="POST" enctype="multipart/form-data">
+
+        <div style="display: grid; grid-template-columns: 2fr 1fr; gap: 24px;">
+
+          <!-- Left Column -->
+          <div>
+
+            <!-- Payment Info -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="credit-card" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Informasi Pembayaran
+              </h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label class="form-label">Status Pembayaran</label>
+                  <select name="payment_status" class="form-select">
+                    <option value="pending" <%= order.payment_status === 'pending' ? 'selected' : '' %>>Pending</option>
+                    <option value="paid" <%= order.payment_status === 'paid' ? 'selected' : '' %>>Lunas</option>
+                    <option value="expire" <%= order.payment_status === 'expire' ? 'selected' : '' %>>Kadaluarsa</option>
+                    <option value="unpaid" <%= order.payment_status === 'unpaid' ? 'selected' : '' %>>Unpaid</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Total Harga</label>
+                  <div id="calculatedPrice" style="font-weight: 800; font-size: 1.2rem; color: var(--brand-blue); padding: 10px 14px; background: var(--accent-light); border-radius: 8px; border: 1px solid #E5E7EB;">
+                    <%= order.total_price ? 'Rp ' + order.total_price.toLocaleString('id-ID') : '-' %>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">ID Midtrans</label>
+                  <input type="text" class="form-input" value="<%= order.midtrans_order_id || '-' %>" readonly style="background: #F8FAFC; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Transaction ID</label>
+                  <input type="text" class="form-input" value="<%= order.midtrans_transaction_id || '-' %>" readonly style="background: #F8FAFC; font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Product Details -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="box" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Detail Produk
+              </h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label class="form-label">Material</label>
+                  <select name="material_type" id="materialSelect" class="form-select">
+                    <option value="">Pilih Material</option>
+                    <option value="PLA" <%= (order.material_type || order.material) === 'PLA' ? 'selected' : '' %>>PLA</option>
+                    <option value="PETG" <%= (order.material_type || order.material) === 'PETG' ? 'selected' : '' %>>PETG</option>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Layer Height (mm)</label>
+                  <select name="layer_height" id="layerHeightSelect" class="form-select">
+                    <option value="">Pilih Resolusi</option>
+                    <% ['0.08','0.10','0.12','0.15','0.20','0.22'].forEach(lh => { %>
+                      <option value="<%= lh %>" <%= order.layer_height === lh ? 'selected' : '' %>><%= lh %> mm</option>
+                    <% }); %>
+                  </select>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Berat (gram)</label>
+                  <input type="number" name="gram_weight" id="gramWeightInput" class="form-input"
+                    value="<%= order.gram_weight || '' %>" min="0.1" step="0.1" placeholder="cth: 50" />
+                </div>
+              </div>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-top: 8px;">
+                Mengubah material/layer/gram akan recalculate harga otomatis.
+              </p>
+            </div>
+
+            <!-- Client Info -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="user" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Data Klien
+              </h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group">
+                  <label class="form-label">Nama</label>
+                  <input type="text" name="client_name" class="form-input" value="<%= order.client_name %>" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">WhatsApp</label>
+                  <input type="text" name="whatsapp" class="form-input" value="<%= order.whatsapp || '' %>" />
+                </div>
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label">Email</label>
+                  <input type="email" name="email" class="form-input" value="<%= order.email || '' %>" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Alamat Pengiriman -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="map-pin" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Alamat Pengiriman
+              </h3>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+                <div class="form-group" style="grid-column: 1 / -1;">
+                  <label class="form-label">Alamat Lengkap</label>
+                  <textarea name="address" class="form-input" rows="2" placeholder="Jl., RT/RW, Kelurahan, Kecamatan"><%= order.address || '' %></textarea>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Kota / Kabupaten</label>
+                  <input type="text" name="city" class="form-input" value="<%= order.city || '' %>" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Provinsi</label>
+                  <input type="text" name="province" class="form-input" value="<%= order.province || '' %>" />
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Kode Pos</label>
+                  <input type="text" name="postal_code" class="form-input" value="<%= order.postal_code || '' %>" maxlength="10" />
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Right Column -->
+          <div>
+
+            <!-- Order Status -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="activity" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Status Pesanan
+              </h3>
+              <div class="form-group">
+                <select name="status" class="form-select">
+                  <% ['Pesanan Masuk','Sedang Dikerjakan','Sedang Dicetak','Selesai','Siap Dikirim','Sudah Dikirim'].forEach(s => { %>
+                    <option value="<%= s %>" <%= order.status === s ? 'selected' : '' %>><%= s %></option>
+                  <% }); %>
+                </select>
+              </div>
+            </div>
+
+            <!-- Tracking -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="truck" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Pengiriman
+              </h3>
+              <div class="form-group">
+                <label class="form-label">Nomor Tracking</label>
+                <input type="text" name="tracking_number" class="form-input"
+                  value="<%= order.tracking_number || '' %>" placeholder="cth: JNE123456" />
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="message-square" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Catatan
+              </h3>
+              <div class="form-group">
+                <textarea name="notes" class="form-input" rows="4" placeholder="Catatan pesanan..."><%= order.notes || '' %></textarea>
+              </div>
+            </div>
+
+            <!-- Documentation Images -->
+            <div class="glass-card" style="padding: 24px; margin-bottom: 24px;">
+              <h3 style="margin-bottom: 20px; display: flex; align-items: center; gap: 8px;">
+                <i data-lucide="camera" style="width:16px;height:16px; color: var(--brand-blue);"></i>
+                Dokumentasi Pesanan
+              </h3>
+              <p style="font-size: 0.78rem; color: var(--text-muted); margin-bottom: 16px;">
+                Upload foto dokumentasi untuk ditampilkan ke klien. Maks 10 foto, masing-masing maks 5MB.
+              </p>
+
+              <!-- Existing Images -->
+              <% if (docImages && docImages.length > 0) { %>
+              <div style="display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 10px; margin-bottom: 16px;">
+                <% docImages.forEach(img => { %>
+                <div class="doc-thumb-wrap" style="position: relative; border-radius: 8px; overflow: hidden; border: 1px solid #e5e7eb;">
+                  <img src="<%= img.image_path %>" alt="Dokumentasi" style="width: 100%; height: 110px; object-fit: cover; display: block;" />
+                  <button type="button" class="doc-del-btn" data-id="<%= img.id %>" data-order="<%= order.id %>"
+                    style="position: absolute; top: 4px; right: 4px; background: rgba(220,38,38,0.85); border: none; border-radius: 50%; width: 22px; height: 22px; cursor: pointer; display: flex; align-items: center; justify-content: center; color: white; font-size: 12px; line-height: 1;">
+                    &times;
+                  </button>
+                </div>
+                <% }); %>
+              </div>
+              <% } else { %>
+              <div id="noDocImages" style="background: #f8fafc; border: 2px dashed #e5e7eb; border-radius: 8px; padding: 16px; text-align: center; color: var(--text-muted); font-size: 0.82rem; margin-bottom: 16px;">
+                Belum ada foto dokumentasi
+              </div>
+              <% } %>
+
+              <!-- Upload Dropzone -->
+              <div id="docDropzone" style="position: relative; background: #f8fafc; border: 2px dashed #cbd5e1; border-radius: 8px; padding: 24px; text-align: center; cursor: pointer; transition: border-color 0.2s; margin-bottom: 12px;"
+                onmouseover="this.style.borderColor='#3b82f6'" onmouseout="this.style.borderColor='#cbd5e1'">
+                <i data-lucide="upload-cloud" style="width:28px;height:28px;color:#94a3b8;margin-bottom:6px;"></i>
+                <div style="font-size:0.85rem;color:#64748b;font-weight:500;">Klik atau drag foto ke sini</div>
+                <div style="font-size:0.75rem;color:#94a3b8;margin-top:2px;">JPG, PNG, GIF, WebP — maks 5MB per file</div>
+                <input type="file" name="doc_images" id="docImagesInput" accept="image/*" multiple
+                  style="position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;cursor:pointer;" onchange="handleDocFiles(this.files)" />
+              </div>
+
+              <!-- Preview -->
+              <div id="docPreview" style="display:none; margin-bottom: 12px;"></div>
+
+              <!-- Upload Button -->
+              <button type="submit" class="btn btn-primary btn-md" style="width: 100%; display: flex; justify-content: center; align-items: center; gap: 8px;">
+                <i data-lucide="save" style="width:16px;height:16px;"></i>
+                Simpan Perubahan
+              </button>
+            </div>
+
+          </div>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+<script>lucide.createIcons();</script>
+<script src="/assets/js/main.js"></script>
+<script src="/assets/js/cart.js"></script>
+<script>
+  window.__prices = <%- JSON.stringify(prices) %>;
+</script>
+<script>
+  // Dropzone click to open file dialog
+  document.getElementById('docDropzone').addEventListener('click', function(e) {
+    if (e.target.tagName !== 'INPUT') {
+      document.getElementById('docImagesInput').click();
+    }
+  });
+
+  // Drag & drop
+  const dropzone = document.getElementById('docDropzone');
+  ['dragenter','dragover'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = '#3b82f6';
+      dropzone.style.background = '#eff6ff';
+    });
+  });
+  ['dragleave','drop'].forEach(evt => {
+    dropzone.addEventListener(evt, (e) => {
+      e.preventDefault();
+      dropzone.style.borderColor = '#cbd5e1';
+      dropzone.style.background = '#f8fafc';
+    });
+  });
+  dropzone.addEventListener('drop', (e) => {
+    const files = e.dataTransfer.files;
+    document.getElementById('docImagesInput').files = files;
+    handleDocFiles(files);
+  });
+
+  // File preview
+  function handleDocFiles(files) {
+    const preview = document.getElementById('docPreview');
+    preview.innerHTML = '';
+    preview.style.display = 'grid';
+    preview.style.gridTemplateColumns = 'repeat(auto-fill, minmax(100px, 1fr))';
+    preview.style.gap = '8px';
+
+    Array.from(files).forEach(file => {
+      if (!file.type.startsWith('image/')) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const div = document.createElement('div');
+        div.style.cssText = 'position:relative; border-radius:6px; overflow:hidden; border:1px solid #e5e7eb;';
+        div.innerHTML = `<img src="${e.target.result}" style="width:100%;height:100px;object-fit:cover;display:block;" />
+          <div style="position:absolute;bottom:0;left:0;right:0;background:rgba(0,0,0,0.4);padding:2px 4px;font-size:10px;color:white;text-align:center;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">${file.name}</div>`;
+        preview.appendChild(div);
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // Delete documentation image
+  document.querySelectorAll('.doc-del-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      if (!confirm('Hapus foto dokumentasi ini?')) return;
+      const imageId = btn.dataset.id;
+      const orderId = btn.dataset.order;
+      try {
+        const res = await fetch(`/admin/pesanan-midtrans/${orderId}/images/${imageId}`, { method: 'DELETE' });
+        const data = await res.json();
+        if (data.success) {
+          btn.closest('.doc-thumb-wrap').remove();
+          // Show empty state if no images left
+          const thumbs = document.querySelectorAll('.doc-thumb-wrap');
+          if (thumbs.length === 0) {
+            const docSection = document.getElementById('docDropzone').closest('.glass-card');
+            const existingEmpty = docSection.querySelector('#noDocImages');
+            if (!existingEmpty) {
+              const emptyDiv = document.createElement('div');
+              emptyDiv.id = 'noDocImages';
+              emptyDiv.style.cssText = 'background:#f8fafc;border:2px dashed #e5e7eb;border-radius:8px;padding:16px;text-align:center;color:var(--text-muted);font-size:0.82rem;margin-bottom:16px;';
+              emptyDiv.textContent = 'Belum ada foto dokumentasi';
+              const dropzone = document.getElementById('docDropzone');
+              dropzone.parentNode.insertBefore(emptyDiv, dropzone);
+            }
+          }
+        }
+      } catch (err) {
+        alert('Gagal menghapus foto');
+      }
+    });
+  });
+</script>
+</body>
+</html>

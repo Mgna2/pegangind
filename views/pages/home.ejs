@@ -1,0 +1,249 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<!-- ===== HERO ===== -->
+<section class="hero">
+  <div class="blob blob-1"></div>
+  <div class="blob blob-2"></div>
+  <div class="container">
+    <div class="hero-inner">
+      <!-- LEFT: Text Content -->
+      <div class="hero-content">
+        <span class="hero-eyebrow">
+          <i data-lucide="factory" style="width:14px;height:14px;"></i>
+          Jasa 3D Printing Profesional
+        </span>
+        <h1 class="hero-title">
+          Cetak Ide Kamu<br>
+          Jadi <span class="gradient-text" id="typewriter" data-words='["Kenyataan","Figurine","Prototipe","Karya Nyata"]'>Kenyataan</span>
+        </h1>
+        <p class="hero-sub">Layanan 3D printing custom berkualitas tinggi. Dari figurine, prototype produk, hingga spare part mekanik — kami kerjakan dengan presisi dan teliti.</p>
+        <div class="hero-cta">
+          <a href="/cek-pesanan" class="btn btn-primary btn-lg">
+            <i data-lucide="search" style="width:18px;height:18px;"></i>
+            Cek Pesanan
+          </a>
+          <a href="/kontak" class="btn btn-secondary btn-lg">
+            Pesan Sekarang
+            <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+          </a>
+        </div>
+      </div>
+
+      <!-- RIGHT: Hero Image -->
+      <div class="hero-visual" style="justify-content: center; align-items: center;">
+        <div class="glass-card shimmer-hover" style="padding: 16px; animation: bob 4s ease-in-out infinite; max-width: 480px; width: 100%; border-radius: 24px;">
+          <img
+            src="https://www.pegangind.com/_next/image?url=%2Fimg%2Fbambu.png&w=1920&q=75"
+            alt="Bambu 3D Printer"
+            style="width: 100%; height: auto; display: block; border-radius: 16px;"
+            loading="eager"
+          />
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== SERVICES ===== -->
+<section style="background: white; padding: 100px 0;">
+  <div class="container">
+    <div class="section-header reveal">
+      <span class="tag">
+        <i data-lucide="settings" style="width:12px;height:12px;"></i>
+        Layanan Kami
+      </span>
+      <h2 class="section-title">Apa yang Bisa Kami Cetak?</h2>
+      <div class="divider"></div>
+      <p class="section-subtitle">Dari desain digital ke objek nyata — kami hadir untuk semua kebutuhan 3D printing kamu.</p>
+    </div>
+    <div class="services-grid">
+      <div class="glass-card service-card reveal reveal-delay-1 shimmer-hover">
+        <div class="service-icon"><i data-lucide="box" style="width:32px;height:32px;"></i></div>
+        <h3>Figurine & Miniatur</h3>
+        <p>Cetak karakter anime, game, atau desain custom kamu dengan detil level tinggi dan finishing mulus.</p>
+      </div>
+      <div class="glass-card service-card reveal reveal-delay-2 shimmer-hover">
+        <div class="service-icon"><i data-lucide="cog" style="width:32px;height:32px;"></i></div>
+        <h3>Parts Mekanik</h3>
+        <p>Spare part kustom, bracket, housing, dan komponen teknis lainnya dari berbagai material engineering.</p>
+      </div>
+      <div class="glass-card service-card reveal reveal-delay-3 shimmer-hover">
+        <div class="service-icon"><i data-lucide="lightbulb" style="width:32px;height:32px;"></i></div>
+        <h3>Prototipe Produk</h3>
+        <p>Wujudkan ide bisnis kamu dengan rapid prototyping cepat. Dari konsep ke model fisik dalam hitungan hari.</p>
+      </div>
+      <div class="glass-card service-card reveal reveal-delay-4 shimmer-hover">
+        <div class="service-icon"><i data-lucide="palette" style="width:32px;height:32px;"></i></div>
+        <h3>Custom & Aksesoris</h3>
+        <p>Keycap custom, phone stand, organizer meja, decor unik — apapun yang bisa didesain, bisa kami cetak.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PORTFOLIO PREVIEW ===== -->
+<section class="bg-grid" style="padding: 100px 0;">
+  <div class="container">
+    <div class="section-header reveal" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 0;">
+      <div>
+        <span class="tag"><i data-lucide="image" style="width:12px;height:12px;"></i> Hasil Karya</span>
+        <h2 class="section-title">Portofolio Terbaru</h2>
+        <div class="divider"></div>
+      </div>
+      <a href="/portofolio" class="btn btn-secondary" style="flex-shrink: 0; margin-bottom: 24px;">
+        Lihat Semua <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+      </a>
+    </div>
+    <div class="portfolio-grid" style="margin-top: 48px;">
+      <% if (portfolio && portfolio.length > 0) { %>
+        <% portfolio.forEach((item, i) => { %>
+          <div class="portfolio-item reveal" style="transition-delay: <%= i * 0.1 %>s">
+            <% if (item.image_path) { %>
+              <img src="<%= item.image_path %>" alt="<%= item.title %>" loading="lazy" />
+            <% } else { %>
+              <div class="portfolio-placeholder">
+                <i data-lucide="printer" style="width:40px;height:40px;"></i>
+                <span style="font-size: 0.875rem; font-weight: 600;"><%= item.title %></span>
+              </div>
+            <% } %>
+            <div class="portfolio-overlay">
+              <div style="font-size: 0.75rem; opacity: 0.7; text-transform: uppercase; letter-spacing: 1px;"><%= item.category %></div>
+              <div style="font-weight: 700; font-size: 1rem; margin-top: 4px;"><%= item.title %></div>
+              <div style="font-size: 0.8rem; opacity: 0.8; margin-top: 4px;"><%= item.description %></div>
+            </div>
+          </div>
+        <% }) %>
+      <% } else { %>
+        <% for(let i=0; i<6; i++) { %>
+          <div class="portfolio-item reveal" style="transition-delay: <%= i * 0.1 %>s">
+            <div class="portfolio-placeholder">
+              <i data-lucide="printer" style="width:40px;height:40px;"></i>
+              <span style="font-size: 0.875rem;">Coming soon</span>
+            </div>
+          </div>
+        <% } %>
+      <% } %>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ORDER TRACKING BANNER ===== -->
+<section class="tracking-banner">
+  <div class="container" style="position: relative; z-index: 1; text-align: center;">
+    <span class="tag" style="background: rgba(255,255,255,0.15); color: white; margin-bottom: 20px;">
+      <i data-lucide="search" style="width:12px;height:12px;"></i>
+      Order Tracking
+    </span>
+    <h2 class="section-title reveal" style="color: white; margin-bottom: 12px;">Lacak Pesanan Kamu</h2>
+    <p class="reveal" style="color: rgba(255,255,255,0.75); margin-bottom: 32px;">Paste nomor resi Shopee untuk melihat status dan progress pesananmu secara real-time.</p>
+    <form class="reveal" action="/cek-pesanan" method="GET" style="max-width: 600px; margin: 0 auto;">
+      <div class="track-input-wrap">
+        <input type="text" name="resi" class="resi-input" placeholder="Paste nomor resi Shopee di sini..." />
+        <button type="submit" class="btn btn-primary btn-lg" style="background: var(--brand-green); color: #1a1a1a; font-weight: 700; white-space: nowrap;">
+          Lacak <i data-lucide="arrow-right" style="width:18px;height:18px;"></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</section>
+
+<!-- ===== ABOUT STATS ===== -->
+<section style="padding: 100px 0; background: white;">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;">
+      <div class="reveal">
+        <span class="tag"><i data-lucide="building-2" style="width:12px;height:12px;"></i> Tentang Kami</span>
+        <h2 class="section-title">Kenapa Pilih pegangind?</h2>
+        <div class="divider"></div>
+        <p style="color: var(--text-muted); line-height: 1.8; margin-bottom: 24px;">Kami adalah studio 3D printing yang berfokus pada kualitas, kecepatan, dan kepuasan pelanggan. Dengan teknologi printer terkini dan tim berpengalaman, setiap pesanan dikerjakan dengan penuh dedikasi.</p>
+        <a href="/tentang" class="btn btn-secondary">Pelajari Lebih Lanjut</a>
+      </div>
+      <div class="stats-row reveal">
+        <div style="text-align: center; padding: 32px; border-radius: 20px; background: var(--accent-light);">
+          <div class="stat-num gradient-text" data-count="500" data-suffix="+">0</div>
+          <div class="stat-desc">Pesanan Selesai</div>
+        </div>
+        <div style="text-align: center; padding: 32px; border-radius: 20px; background: var(--accent-light);">
+          <div class="stat-num gradient-text" data-count="98" data-suffix="%">0</div>
+          <div class="stat-desc">Kepuasan Pelanggan</div>
+        </div>
+        <div style="text-align: center; padding: 32px; border-radius: 20px; background: var(--accent-light);">
+          <div class="stat-num gradient-text" data-count="3" data-suffix=" Tahun">0</div>
+          <div class="stat-desc">Pengalaman</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PRICING PREVIEW ===== -->
+<section class="bg-grid" style="padding: 100px 0;">
+  <div class="container">
+    <div class="section-header reveal" style="text-align: center;">
+      <span class="tag"><i data-lucide="receipt" style="width:12px;height:12px;"></i> Harga</span>
+      <h2 class="section-title">Harga per Gram Transparan</h2>
+      <div class="divider" style="margin: 16px auto 24px;"></div>
+      <p class="section-subtitle" style="margin: 0 auto 60px;">Harga dihitung per gram berdasarkan material dan resolusi cetak (layer height).</p>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto 40px;">
+      <!-- PLA -->
+      <div class="reveal">
+        <div style="background: var(--brand-blue); color: white; padding: 16px 24px; border-radius: var(--radius-md) var(--radius-md) 0 0; font-weight: 700; font-size: 1rem;">Material PLA</div>
+        <div style="background: white; border: 1px solid #E5E7EB; border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); overflow: hidden; box-shadow: 0 4px 16px rgba(18,72,117,0.08);">
+          <div style="display: flex; justify-content: space-between; padding: 10px 20px; background: #F8FAFC; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
+            <span>Resolusi</span><span>Harga / gram</span>
+          </div>
+          <% [['0.08 mm','Rp 699'],['0.10 mm','Rp 499'],['0.12 mm','Rp 449'],['0.15 mm','Rp 399'],['0.20 mm','Rp 349'],['0.22 mm','Rp 299']].forEach(([res, harga]) => { %>
+          <div style="display: flex; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid #F1F5F9; font-size: 0.9rem; transition: background 0.15s;">
+            <span><%= res %></span><span style="font-weight: 600; color: var(--brand-blue);"><%= harga %></span>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+      <!-- PETG -->
+      <div class="reveal reveal-delay-1">
+        <div style="background: var(--brand-blue); color: white; padding: 16px 24px; border-radius: var(--radius-md) var(--radius-md) 0 0; font-weight: 700; font-size: 1rem;">Material PETG</div>
+        <div style="background: white; border: 1px solid #E5E7EB; border-top: none; border-radius: 0 0 var(--radius-md) var(--radius-md); overflow: hidden; box-shadow: 0 4px 16px rgba(18,72,117,0.08);">
+          <div style="display: flex; justify-content: space-between; padding: 10px 20px; background: #F8FAFC; font-size: 0.8rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.5px;">
+            <span>Resolusi</span><span>Harga / gram</span>
+          </div>
+          <% [['0.08 mm','Rp 799'],['0.10 mm','Rp 660'],['0.12 mm','Rp 590'],['0.15 mm','Rp 540'],['0.20 mm','Rp 490'],['0.22 mm','Rp 360']].forEach(([res, harga]) => { %>
+          <div style="display: flex; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid #F1F5F9; font-size: 0.9rem; transition: background 0.15s;">
+            <span><%= res %></span><span style="font-weight: 600; color: var(--brand-blue);"><%= harga %></span>
+          </div>
+          <% }) %>
+        </div>
+      </div>
+    </div>
+    <div class="reveal" style="text-align: center;">
+      <a href="/harga" class="btn btn-secondary">
+        Lihat Detail Harga <i data-lucide="arrow-right" style="width:16px;height:16px;"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT CTA ===== -->
+<section style="padding: 100px 0; background: var(--text-primary);">
+  <div class="container" style="text-align: center;">
+    <h2 class="reveal" style="color: white; font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 16px;">Punya Proyek 3D Printing?</h2>
+    <p class="reveal" style="color: rgba(255,255,255,0.65); margin-bottom: 40px; font-size: 1.1rem;">Hubungi kami sekarang dan dapatkan estimasi harga gratis dalam 24 jam.</p>
+    <div class="reveal" style="display: flex; gap: 14px; justify-content: center; flex-wrap: wrap;">
+      <a href="/kontak" class="btn btn-primary btn-lg">
+        <i data-lucide="mail" style="width:18px;height:18px;"></i>
+        Hubungi Kami
+      </a>
+      <a href="https://wa.me/6281234567890" class="btn btn-lg" style="background: #25D366; color: white;">
+        <i data-lucide="message-circle" style="width:18px;height:18px;"></i>
+        WhatsApp Langsung
+      </a>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+<script>lucide.createIcons();</script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>

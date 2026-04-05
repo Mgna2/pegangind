@@ -1,0 +1,109 @@
+<%- include('../partials/head') %>
+<%- include('../partials/navbar') %>
+
+<section style="padding: 140px 0 80px; background: linear-gradient(160deg, #FAFCFF, var(--accent-light)); text-align: center;">
+  <div class="container">
+    <span class="tag"><i data-lucide="building-2" style="width:12px;height:12px;"></i> Tentang Kami</span>
+    <h1 class="section-title reveal">pegangind — Studio 3D Print Indonesia</h1>
+    <div class="divider reveal" style="margin: 16px auto;"></div>
+    <p class="reveal" style="color: var(--text-muted); max-width: 600px; margin: 0 auto;">Kami percaya bahwa ide yang baik berhak diwujudkan. Itulah mengapa kami hadir — untuk membuat impian kamu jadi nyata.</p>
+  </div>
+</section>
+
+<section style="padding: 80px 0;">
+  <div class="container">
+    <div class="about-grid">
+      <div class="reveal">
+        <span class="tag"><i data-lucide="book-open" style="width:12px;height:12px;"></i> Cerita Kami</span>
+        <h2 class="section-title" style="font-size: 2rem;">Dari Hobi Jadi Profesi</h2>
+        <div class="divider"></div>
+        <p style="color: var(--text-muted); line-height: 1.9; margin-bottom: 20px;">Berawal dari rasa penasaran terhadap teknologi 3D printing pada 2022, pegangind lahir dari garasi kecil dengan satu printer dan semangat yang besar. Kini, kami telah melayani ratusan pelanggan dari seluruh Indonesia.</p>
+        <p style="color: var(--text-muted); line-height: 1.9;">Kami percaya bahwa setiap detail penting. Itulah mengapa setiap pesanan kami kerjakan dengan teliti, presisi, dan penuh dedikasi — dari file desain hingga produk jadi di tangan kamu.</p>
+      </div>
+      <div class="timeline reveal">
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2022</div>
+          <div class="timeline-title">pegangind didirikan</div>
+          <div class="timeline-desc">Mulai dari 1 printer FDM dan Shopee Store pertama.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2023</div>
+          <div class="timeline-title">Ekspansi & 100 pesanan pertama</div>
+          <div class="timeline-desc">Menambah 2 unit printer baru, mulai menerima project prototipe industri.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2024</div>
+          <div class="timeline-title">Studio dedicated & printer resin</div>
+          <div class="timeline-desc">Pindah ke studio khusus, menambah printer resin SLA untuk cetak ultra-detail.</div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-dot"></div>
+          <div class="timeline-year">2026</div>
+          <div class="timeline-title">Website pegangind.com launch</div>
+          <div class="timeline-desc">Platform baru dengan order tracking terintegrasi dan portofolio digital.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section style="background: var(--brand-blue); padding: 80px 0;">
+  <div class="container">
+    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; text-align: center;">
+      <% [['500+','Pesanan Selesai'],['98%','Kepuasan Pelanggan'],['3','Tahun Pengalaman'],['5','Printer Aktif']].forEach(([n, l]) => { %>
+        <div class="reveal">
+          <div style="font-family: 'Poppins', sans-serif; font-size: 3rem; font-weight: 800; color: var(--brand-green); margin-bottom: 8px;"><%= n %></div>
+          <div style="color: rgba(255,255,255,0.75); font-weight: 500;"><%= l %></div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</section>
+
+<section style="padding: 100px 0; background: white;">
+  <div class="container">
+    <div class="section-header reveal" style="text-align: center;">
+      <span class="tag"><i data-lucide="star" style="width:12px;height:12px;"></i> Nilai Kami</span>
+      <h2 class="section-title">Komitmen Kami</h2>
+      <div class="divider" style="margin: 16px auto;"></div>
+    </div>
+    <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px;">
+      <div class="glass-card reveal reveal-delay-1" style="padding: 36px 28px; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+          <div style="width: 64px; height: 64px; border-radius: 18px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; color: var(--brand-blue);">
+            <i data-lucide="crosshair" style="width:28px;height:28px;"></i>
+          </div>
+        </div>
+        <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Presisi Tinggi</h3>
+        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.7;">Setiap cetak dimonitor ketat, layer per layer, untuk memastikan hasil sempurna.</p>
+      </div>
+      <div class="glass-card reveal reveal-delay-2" style="padding: 36px 28px; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+          <div style="width: 64px; height: 64px; border-radius: 18px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; color: var(--brand-blue);">
+            <i data-lucide="zap" style="width:28px;height:28px;"></i>
+          </div>
+        </div>
+        <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Pengerjaan Cepat</h3>
+        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.7;">Kami menghargai waktu kamu. Pengerjaan standar 3–7 hari kerja.</p>
+      </div>
+      <div class="glass-card reveal reveal-delay-3" style="padding: 36px 28px; text-align: center;">
+        <div style="display: flex; justify-content: center; margin-bottom: 16px;">
+          <div style="width: 64px; height: 64px; border-radius: 18px; background: var(--accent-light); display: flex; align-items: center; justify-content: center; color: var(--brand-blue);">
+            <i data-lucide="message-circle" style="width:28px;height:28px;"></i>
+          </div>
+        </div>
+        <h3 style="margin-bottom: 12px; font-size: 1.1rem;">Komunikasi Terbuka</h3>
+        <p style="color: var(--text-muted); font-size: 0.875rem; line-height: 1.7;">Update proaktif lewat WhatsApp di setiap tahap pengerjaan.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%- include('../partials/footer') %>
+<script>lucide.createIcons();</script>
+<script src="/assets/js/main.js"></script>
+</body>
+</html>
