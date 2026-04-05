@@ -30,7 +30,5 @@
     "socket.io": "^4.8.3",
     "uuid": "^13.0.0"
   },
-  "devDependencies": {
-    "@vercel/cli": "^40.0.0"
-  }
+  "devDependencies": {}
 }
